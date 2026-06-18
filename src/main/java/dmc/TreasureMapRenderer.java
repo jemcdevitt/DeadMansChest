@@ -11,23 +11,29 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.MapMeta;
 import org.bukkit.map.MapCanvas;
 import org.bukkit.map.MapCursor;
 import org.bukkit.map.MapCursorCollection;
 import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
+import org.bukkit.persistence.PersistentDataType;
+
+import static dmc.DeadMansChestPlugin.LOG;
+
 
 public class TreasureMapRenderer extends MapRenderer {
-	private static final Color PARCHMENT_WATER = new Color(170, 139, 82);
-	private static final Color PARCHMENT_LAND_LOW = new Color(218, 190, 120);
-	private static final Color PARCHMENT_LAND_HIGH = new Color(126, 91, 47);
-		
 	private final Location treasureLoc;
 	private boolean renderedBaseMap = false;
+	private TreasureMapImage image ;
+	private ItemStack map;
 
-	public TreasureMapRenderer(Location treasureLoc) {
+	public TreasureMapRenderer(ItemStack map, TreasureMapImage image, Location treasureLoc) {
 		super(false);
+		this.image = image;
 		this.treasureLoc = treasureLoc.clone();
+		this.map = map;
 	}
 
 	@Override
@@ -37,8 +43,19 @@ public class TreasureMapRenderer extends MapRenderer {
 		}
 
 		if(!renderedBaseMap) {
-			renderPirateMap(canvas, treasureLoc);
-			renderedBaseMap = true;
+			if( image.isReady()) {
+				paintPreparedMap(canvas);
+
+				if(!(map.getItemMeta() instanceof MapMeta meta)) {
+					return;
+				}
+				meta.getPersistentDataContainer().set(Constants.DMC_MAP_PIXELS, PersistentDataType.BYTE_ARRAY, image.toPackedBitsArray());
+				map.setItemMeta(meta);
+				renderedBaseMap = true;
+			} else {
+				image.update();
+				paintBlankParchment(canvas);
+			}
 		}
 
 		MapCursorCollection cursors = new MapCursorCollection();
@@ -46,38 +63,26 @@ public class TreasureMapRenderer extends MapRenderer {
 		canvas.setCursors(cursors);
 	}
 
-	private void renderPirateMap(MapCanvas canvas, Location center) {
-		World world = center.getWorld();
-		int seaLevel = world.getSeaLevel() - 1;
-
-		int scale = 4;  //matches Scale.NORMAL
-		for(int px = 0; px < 128; px++) {
-			for(int py = 0; py < 128; py++) {
-				int dx = (px - 64) * scale;
-				int dz = (py - 64) * scale;
-
-				int worldX = center.getBlockX() + dx;
-				int worldZ = center.getBlockZ() + dz;
-
-				int highestY = world.getHighestBlockYAt(worldX, worldZ);
-				Material top = world.getBlockAt(worldX, highestY-1, worldZ).getType();
-
-				Color color = Color.RED; //missing
-				if( isWater(top)) {
-					color = PARCHMENT_WATER;
-				} else if( highestY >= seaLevel + 12 )  {
-					color = PARCHMENT_LAND_HIGH;
-				} else {
-					color = PARCHMENT_LAND_LOW;
-				}
+	private void paintPreparedMap(MapCanvas canvas) {
+		for(int px = 0; px < image.getWidth(); px++ ) {
+			for(int py = 0; py < image.getHeight(); py++) {
+				Color color = image.getColorAt(px, py);
 				canvas.setPixelColor(px, py, color);
 			}
 		}
-
 		drawTreasureIndicator(canvas, 64 - (SkullCrossbones.getWidth()/2), 64 - (SkullCrossbones.getHeight()/2));
-			
 	}
 
+	private void paintBlankParchment(MapCanvas canvas) {
+		int maxPixels = 0;
+		int nextPixel = image.getNextPixel();
+		for(int px = 0; px < image.getWidth() && maxPixels < nextPixel; px++) {
+			for(int py = 0; py < image.getHeight() && maxPixels < nextPixel; py++) {
+				Color color = image.getColorAt(px, py);
+				canvas.setPixelColor(px, py, color);
+			}
+		}
+	}
 	private void drawTreasureIndicator(MapCanvas canvas, int startX, int startY) {
 		for(int y = 0; y < SkullCrossbones.getHeight(); y++) {
 			for(int x = 0; x < SkullCrossbones.getWidth(); x++) {
@@ -97,16 +102,6 @@ public class TreasureMapRenderer extends MapRenderer {
 		}
 	}
 				
-
-	private boolean isWater(Material material) {
-		return
-			material == Material.WATER ||
-			material == Material.KELP ||
-			material == Material.KELP_PLANT ||
-			material == Material.SEAGRASS ||
-			material == Material.TALL_SEAGRASS ||
-			material == Material.LILY_PAD;
-	}
 
 	private MapCursor treasureCursor(Player player, Location treasureLoc, MapView view) {
 		int[] marker = calculateMarkerPosition(player.getLocation(), treasureLoc, view);

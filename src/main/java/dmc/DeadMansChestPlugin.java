@@ -27,6 +27,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.joml.Vector3f;
 
 /**
  * The primary plugin.  Currently there are no permission
@@ -88,9 +89,34 @@ public class DeadMansChestPlugin extends JavaPlugin {
 
 		if(commandName.equalsIgnoreCase("flush")) {
 			barrelManager.flushAllBarrels();
+			barrelManager.flushAllTreasureChests(player.getLocation().getWorld());
 		}
 		if(commandName.equalsIgnoreCase("info")) {
 			barrelManager.showAllBarrels();
+		}
+		if(commandName.equalsIgnoreCase("chest")) {
+			
+			Location pl = player.getLocation();
+			new TreasureChest(new Location(pl.getWorld(), pl.getBlockX(), pl.getBlockY(), pl.getBlockZ()));
+			/*
+			new CompositeDisplay(new Location(pl.getWorld(), pl.getBlockX(), pl.getBlockY(), pl.getBlockZ()), false)
+				.addBlock(Material.COMPOSTER          , new Vector3f(0f,      0f,      0.1875f), new Vector3f(0,0,0), new Vector3f(1f,     0.5625f, 0.625f))
+				.addItem(Material.SKELETON_SKULL     , new Vector3f(0.1875f, 0.375f,  0.8125f), new Vector3f(0,180f,0), new Vector3f(0.25f,  0.25f,   0.25f))
+				.addItem(Material.SKELETON_SKULL     , new Vector3f(0.5f,    0.375f,  0.8125f), new Vector3f(0,180f,0), new Vector3f(0.25f,  0.25f,   0.25f))
+				.addItem(Material.SKELETON_SKULL     , new Vector3f(0.8125f, 0.375f,  0.8125f), new Vector3f(0,180f,0), new Vector3f(0.25f,  0.25f,   0.25f))
+				.addItem(Material.COPPER_CHAIN       , new Vector3f(0.04f,   0.285f,  0.8125f), new Vector3f(0,0,0), new Vector3f(0.25f,  0.6f,    0.25f))
+				.addItem(Material.COPPER_CHAIN       , new Vector3f(0.945f, 0.285f,  0.8125f), new Vector3f(0,0,0), new Vector3f(0.25f,  0.6f,    0.25f))
+				.addItem(Material.COPPER_CHAIN       , new Vector3f(0.04f,   0.285f,  0.1875f), new Vector3f(0,0,0), new Vector3f(0.25f,  0.6f,    0.25f))
+				.addItem(Material.COPPER_CHAIN       , new Vector3f(0.945f, 0.285f,  0.1875f), new Vector3f(0,0,0), new Vector3f(0.25f,  0.6f,    0.25f))
+				.addBlock(Material.WAXED_COPPER_BLOCK , new Vector3f(0.0625f, 0.5625f, 0.1875f), new Vector3f(0,0,0), new Vector3f(0.875f, 0.05f,   0.625f))
+				.addBlock(Material.GOLD_BLOCK         , new Vector3f(0f,      0.5625f, 0.1875f), new Vector3f(0,0,0), new Vector3f(0.065f, 0.05f,   0.625f))
+				.addBlock(Material.GOLD_BLOCK         , new Vector3f(0.9375f, 0.5625f, 0.1875f), new Vector3f(0,0,0), new Vector3f(0.065f, 0.05f,   0.625f))
+				.addBlock(Material.REDSTONE_BLOCK     , new Vector3f(0.125f,  0.5f,    0.78f),   new Vector3f(0,0,0), new Vector3f(0.05f,  0.05f,   0.05f))
+				.addBlock(Material.REDSTONE_BLOCK     , new Vector3f(0.835f,  0.0625f, 0.78f),   new Vector3f(0,0,0), new Vector3f(0.05f,  0.05f,   0.05f))
+				.addBlock(Material.EMERALD_BLOCK      , new Vector3f(0.125f,  0.0625f, 0.78f),   new Vector3f(0,0,0), new Vector3f(0.05f,  0.05f,   0.05f))
+				.addBlock(Material.EMERALD_BLOCK      , new Vector3f(0.835f,  0.5f,    0.78f),   new Vector3f(0,0,0), new Vector3f(0.05f,  0.05f,   0.05f))
+				.addKey(Constants.DMC_TREASURE_COMPONENT, true);
+			*/
 		}
 
 		return true;

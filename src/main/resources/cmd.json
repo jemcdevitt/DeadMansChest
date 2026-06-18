@@ -1,0 +1,17 @@
+{Passengers:
+ [
+     {id:"minecraft:block_display",block_state:{Name:"minecraft:composter",Properties:{}},transformation:[1f,0f,0f,0f,0f,0.5625f,0f,0f,0f,0f,0.625f,0.1875f,0f,0f,0f,1f]},
+     {id:"minecraft:item_display",item:{id:"minecraft:skeleton_skull",Count:1},item_display:"none",transformation:[-0.25f,0f,0f,0.1875f,0f,0.25f,0f,0.375f,0f,0f,-0.25f,0.8125f,0f,0f,0f,1f]},
+     {id:"minecraft:item_display",item:{id:"minecraft:skeleton_skull",Count:1},item_display:"none",transformation:[-0.25f,0f,0f,0.5f,0f,0.25f,0f,0.375f,0f,0f,-0.25f,0.8125f,0f,0f,0f,1f]},
+     {id:"minecraft:item_display",item:{id:"minecraft:skeleton_skull",Count:1},item_display:"none",transformation:[-0.25f,0f,0f,0.8125f,0f,0.25f,0f,0.375f,0f,0f,-0.25f,0.8125f,0f,0f,0f,1f]},
+     {id:"minecraft:item_display",item:{id:"minecraft:copper_chain",Count:1},item_display:"none",transformation:[0.25f,0f,0f,0.04f,0f,0.6f,0f,0.285f,0f,0f,0.25f,0.8125f,0f,0f,0f,1f]},
+     {id:"minecraft:item_display",item:{id:"minecraft:copper_chain",Count:1},item_display:"none",transformation:[0.25f,0f,0f,0.9375f,0f,0.6f,0f,0.285f,0f,0f,0.25f,0.8125f,0f,0f,0f,1f]},
+     {id:"minecraft:item_display",item:{id:"minecraft:copper_chain",Count:1},item_display:"none",transformation:[0.25f,0f,0f,0.04f,0f,0.6f,0f,0.285f,0f,0f,0.25f,0.1875f,0f,0f,0f,1f]},
+     {id:"minecraft:item_display",item:{id:"minecraft:copper_chain",Count:1},item_display:"none",transformation:[0.25f,0f,0f,0.9375f,0f,0.6f,0f,0.285f,0f,0f,0.25f,0.1875f,0f,0f,0f,1f]},
+     {id:"minecraft:block_display",block_state:{Name:"minecraft:waxed_copper_block",Properties:{}},transformation:[0.875f,0f,0f,0.0625f,0f,0.05f,0f,0.5625f,0f,0f,0.625f,0.1875f,0f,0f,0f,1f]},
+     {id:"minecraft:block_display",block_state:{Name:"minecraft:gold_block",Properties:{}},transformation:[0.065f,0f,0f,0f,0f,0.05f,0f,0.5625f,0f,0f,0.625f,0.1875f,0f,0f,0f,1f]},
+     {id:"minecraft:block_display",block_state:{Name:"minecraft:gold_block",Properties:{}},transformation:[0.065f,0f,0f,0.9375f,0f,0.05f,0f,0.5625f,0f,0f,0.625f,0.1875f,0f,0f,0f,1f]},
+     {id:"minecraft:block_display",block_state:{Name:"minecraft:redstone_block",Properties:{}},transformation:[0.05f,0f,0f,0.125f,0f,0.05f,0f,0.5f,0f,0f,0.05f,0.78f,0f,0f,0f,1f]},
+     {id:"minecraft:block_display",block_state:{Name:"minecraft:redstone_block",Properties:{}},transformation:[0.05f,0f,0f,0.835f,0f,0.05f,0f,0.0625f,0f,0f,0.05f,0.78f,0f,0f,0f,1f]},
+     {id:"minecraft:block_display",block_state:{Name:"minecraft:emerald_block",Properties:{}},transformation:[0.05f,0f,0f,0.125f,0f,0.05f,0f,0.0625f,0f,0f,0.05f,0.78f,0f,0f,0f,1f]},
+     {id:"minecraft:block_display",block_state:{Name:"minecraft:emerald_block",Properties:{}},transformation:[0.05f,0f,0f,0.835f,0f,0.05f,0f,0.5f,0f,0f,0.05f,0.78f,0f,0f,0f,1f]}]}

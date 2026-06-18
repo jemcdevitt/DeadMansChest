@@ -1,0 +1,38 @@
+/summon block_display ~-0.5 ~-0.5 ~-0.5 {Passengers:[{id:"minecraft:block_display",block_state:{Name:"minecraft:composter",Properties:{}},transformation:[1f,0f,0f,0f,0f,0.5625f,0f,0f,0f,0f,0.625f,0.1875f,0f,0f,0f,1f]},{id:"minecraft:item_display",item:{id:"minecraft:skeleton_skull",Count:1},item_display:"none",transformation:[-0.25f,0f,0f,0.1875f,0f,0.25f,0f,0.375f,0f,0f,-0.25f,0.8125f,0f,0f,0f,1f]},{id:"minecraft:item_display",item:{id:"minecraft:skeleton_skull",Count:1},item_display:"none",transformation:[-0.25f,0f,0f,0.5f,0f,0.25f,0f,0.375f,0f,0f,-0.25f,0.8125f,0f,0f,0f,1f]},{id:"minecraft:item_display",item:{id:"minecraft:skeleton_skull",Count:1},item_display:"none",transformation:[-0.25f,0f,0f,0.8125f,0f,0.25f,0f,0.375f,0f,0f,-0.25f,0.8125f,0f,0f,0f,1f]},{id:"minecraft:item_display",item:{id:"minecraft:copper_chain",Count:1},item_display:"none",transformation:[0.25f,0f,0f,0.04f,0f,0.6f,0f,0.285f,0f,0f,0.25f,0.8125f,0f,0f,0f,1f]},{id:"minecraft:item_display",item:{id:"minecraft:copper_chain",Count:1},item_display:"none",transformation:[0.25f,0f,0f,0.9375f,0f,0.6f,0f,0.285f,0f,0f,0.25f,0.8125f,0f,0f,0f,1f]},{id:"minecraft:item_display",item:{id:"minecraft:copper_chain",Count:1},item_display:"none",transformation:[0.25f,0f,0f,0.04f,0f,0.6f,0f,0.285f,0f,0f,0.25f,0.1875f,0f,0f,0f,1f]},{id:"minecraft:item_display",item:{id:"minecraft:copper_chain",Count:1},item_display:"none",transformation:[0.25f,0f,0f,0.9375f,0f,0.6f,0f,0.285f,0f,0f,0.25f,0.1875f,0f,0f,0f,1f]},{id:"minecraft:block_display",block_state:{Name:"minecraft:waxed_copper_block",Properties:{}},transformation:[0.875f,0f,0f,0.0625f,0f,0.05f,0f,0.5625f,0f,0f,0.625f,0.1875f,0f,0f,0f,1f]},{id:"minecraft:block_display",block_state:{Name:"minecraft:gold_block",Properties:{}},transformation:[0.065f,0f,0f,0f,0f,0.05f,0f,0.5625f,0f,0f,0.625f,0.1875f,0f,0f,0f,1f]},{id:"minecraft:block_display",block_state:{Name:"minecraft:gold_block",Properties:{}},transformation:[0.065f,0f,0f,0.9375f,0f,0.05f,0f,0.5625f,0f,0f,0.625f,0.1875f,0f,0f,0f,1f]},{id:"minecraft:block_display",block_state:{Name:"minecraft:redstone_block",Properties:{}},transformation:[0.05f,0f,0f,0.125f,0f,0.05f,0f,0.5f,0f,0f,0.05f,0.78f,0f,0f,0f,1f]},{id:"minecraft:block_display",block_state:{Name:"minecraft:redstone_block",Properties:{}},transformation:[0.05f,0f,0f,0.835f,0f,0.05f,0f,0.0625f,0f,0f,0.05f,0.78f,0f,0f,0f,1f]},{id:"minecraft:block_display",block_state:{Name:"minecraft:emerald_block",Properties:{}},transformation:[0.05f,0f,0f,0.125f,0f,0.05f,0f,0.0625f,0f,0f,0.05f,0.78f,0f,0f,0f,1f]},{id:"minecraft:block_display",block_state:{Name:"minecraft:emerald_block",Properties:{}},transformation:[0.05f,0f,0f,0.835f,0f,0.05f,0f,0.5f,0f,0f,0.05f,0.78f,0f,0f,0f,1f]}]}
+
+
+Composter P(0,0,.1875), R(0,0,0), S(1,0.5624,0.625)
+Skull1 P(0.1875, 0.375, 0.8125), R(0,0,0), S(0.25, 0.25, 0.25)
+
+
+| Block              |     Px |     Py |     Pz |    Sx |     Sy |    Sz |
+|--------------------+--------+--------+--------+-------+--------+-------|
+| Composter          |      0 |      0 | 0.1875 |     1 | 0.5625 | 0.625 |
+| Skeleton Skull     | 0.1875 |  0.375 | 0.8125 |  0.25 |   0.25 |  0.25 |
+| Skeleton Skull     |    0.5 |  0.375 | 0.8125 |  0.25 |   0.25 |  0.25 |
+| Skeleton Skull     | 0.8125 |  0.375 | 0.8125 |  0.25 |   0.25 |  0.25 |
+| Copper Chain       |   0.04 |  0.285 | 0.8125 |  0.25 |    0.6 |  0.25 |
+| Copper Chain       | 0.9375 |  0.285 | 0.8125 |  0.25 |    0.6 |  0.25 |
+| Copper Chain       |   0.04 |  0.285 | 0.1875 |  0.25 |    0.6 |  0.25 |
+| Copper Chain       | 0.9375 |  0.285 | 0.1875 |  0.25 |    0.6 |  0.25 |
+| Waxed Copper Block | 0.0625 | 0.5625 | 0.1875 | 0.875 |   0.05 | 0.625 |
+| Gold Block         |      0 | 0.5625 | 0.1875 | 0.065 |   0.05 | 0.625 |
+| Gold Block         | 0.9375 | 0.5625 | 0.1875 | 0.065 |   0.05 | 0.625 |
+| Redstone Block     |  0.125 |    0.5 |   0.78 |  0.05 |   0.05 |  0.05 |
+| Redstone Block     |  0.835 | 0.0625 |   0.78 |  0.05 |   0.05 |  0.05 |
+| Emerald Block      |  0.125 | 0.0625 |   0.78 |  0.05 |   0.05 |  0.05 |
+| Emerald Block      |  0.835 |    0.5 |   0.78 |  0.05 |   0.05 |  0.05 |
+|                    |        |        |        |       |        |       |
+
+
+
+| -0.25f | 0f    | 0f     | 0.1875f |
+| 0f     | 0.25f | 0f     | 0.375f  |
+| 0f     | 0f    | -0.25f | 0.8125f |
+| 0f     | 0f    | 0f     | 1f      |
+
+
+
+
+
+/summon block_display ~-0.5 ~-0.5 ~-0.5 {Passengers:[{id:"minecraft:block_display",block_state:{Name:"minecraft:composter",Properties:{}},transformation:[1f,0f,0f,0f,0f,0.5625f,0f,0f,0f,0f,0.625f,0.1875f,0f,0f,0f,1f]},{id:"minecraft:item_display",item:{id:"minecraft:skeleton_skull",Count:1},item_display:"none",transformation:[-0.25f,0f,0f,0.1875f,0f,0.25f,0f,0.375f,0f,0f,-0.25f,0.8125f,0f,0f,0f,1f]},{id:"minecraft:item_display",item:{id:"minecraft:skeleton_skull",Count:1},item_display:"none",transformation:[-0.25f,0f,0f,0.5f,0f,0.25f,0f,0.375f,0f,0f,-0.25f,0.8125f,0f,0f,0f,1f]},{id:"minecraft:item_display",item:{id:"minecraft:skeleton_skull",Count:1},item_display:"none",transformation:[-0.25f,0f,0f,0.8125f,0f,0.25f,0f,0.375f,0f,0f,-0.25f,0.8125f,0f,0f,0f,1f]},{id:"minecraft:item_display",item:{id:"minecraft:copper_chain",Count:1},item_display:"none",transformation:[0.25f,0f,0f,0.04f,0f,0.6f,0f,0.285f,0f,0f,0.25f,0.8125f,0f,0f,0f,1f]},{id:"minecraft:item_display",item:{id:"minecraft:copper_chain",Count:1},item_display:"none",transformation:[0.25f,0f,0f,0.9375f,0f,0.6f,0f,0.285f,0f,0f,0.25f,0.8125f,0f,0f,0f,1f]},{id:"minecraft:item_display",item:{id:"minecraft:copper_chain",Count:1},item_display:"none",transformation:[0.25f,0f,0f,0.04f,0f,0.6f,0f,0.285f,0f,0f,0.25f,0.1875f,0f,0f,0f,1f]},{id:"minecraft:item_display",item:{id:"minecraft:copper_chain",Count:1},item_display:"none",transformation:[0.25f,0f,0f,0.9375f,0f,0.6f,0f,0.285f,0f,0f,0.25f,0.1875f,0f,0f,0f,1f]},{id:"minecraft:block_display",block_state:{Name:"minecraft:waxed_copper_block",Properties:{}},transformation:[0.875f,0f,0f,0.0625f,0f,0.05f,0f,0.5625f,0f,0f,0.625f,0.1875f,0f,0f,0f,1f]},{id:"minecraft:block_display",block_state:{Name:"minecraft:gold_block",Properties:{}},transformation:[0.065f,0f,0f,0f,0f,0.05f,0f,0.5625f,0f,0f,0.625f,0.1875f,0f,0f,0f,1f]},{id:"minecraft:block_display",block_state:{Name:"minecraft:gold_block",Properties:{}},transformation:[0.065f,0f,0f,0.9375f,0f,0.05f,0f,0.5625f,0f,0f,0.625f,0.1875f,0f,0f,0f,1f]},{id:"minecraft:block_display",block_state:{Name:"minecraft:redstone_block",Properties:{}},transformation:[0.05f,0f,0f,0.125f,0f,0.05f,0f,0.5f,0f,0f,0.05f,0.78f,0f,0f,0f,1f]},{id:"minecraft:block_display",block_state:{Name:"minecraft:redstone_block",Properties:{}},transformation:[0.05f,0f,0f,0.835f,0f,0.05f,0f,0.0625f,0f,0f,0.05f,0.78f,0f,0f,0f,1f]},{id:"minecraft:block_display",block_state:{Name:"minecraft:emerald_block",Properties:{}},transformation:[0.05f,0f,0f,0.125f,0f,0.05f,0f,0.0625f,0f,0f,0.05f,0.78f,0f,0f,0f,1f]},{id:"minecraft:block_display",block_state:{Name:"minecraft:emerald_block",Properties:{}},transformation:[0.05f,0f,0f,0.835f,0f,0.05f,0f,0.5f,0f,0f,0.05f,0.78f,0f,0f,0f,1f]}]}

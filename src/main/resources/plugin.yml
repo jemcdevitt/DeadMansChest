@@ -5,9 +5,12 @@ api-version: "1.21.11"
 author: mictali
 description: A Treasure Hunting plugin
 commands:
-  flush:
-    description: Removes all existing barrels
-    usage: "/deadmanschestplugin flush"
   info:
     description: Dumps info on all existing barrels to log
     usage: "/deadmanschestplugin info"
+  flush:
+    description: Removes all existing barrels
+    usage: "/deadmanschestplugin flush"
+  chest:
+    description: Spawn a deadman's chest
+    usage: "/deadmanschestplugin chest"

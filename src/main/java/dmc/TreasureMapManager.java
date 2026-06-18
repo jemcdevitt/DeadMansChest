@@ -24,6 +24,7 @@ import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.entity.BlockDisplay;
 import org.bukkit.entity.Display;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Interaction;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
@@ -42,6 +43,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.BiomeSearchResult;
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
 
 import static dmc.DeadMansChestPlugin.LOG;
 import static dmc.DeadMansChestPlugin.RNG;
@@ -65,6 +67,13 @@ public class TreasureMapManager implements Listener {
 			barrel.removeFromWorld();
 		}
 		barrels.clear();
+	}
+	public void flushAllTreasureChests(World world) {
+		for(Entity entity : world.getEntities()) {
+			if( isDMCChestComponent(entity)) {
+				entity.remove();
+			}
+		}
 	}
 
 	public void showAllBarrels() {
@@ -182,11 +191,19 @@ public class TreasureMapManager implements Listener {
 			view.removeRenderer(renderer);
 		}
 
-		view.addRenderer(new TreasureMapRenderer(treasureLoc));
+		LOG(0,"Repairing treasure map");
+		byte[] packedBits = pdc.get(Constants.DMC_MAP_PIXELS, PersistentDataType.BYTE_ARRAY);
+		PixelPacker packer = null;
+		if( packedBits != null ) {
+			LOG(0, "Generating pixel packer");
+			packer = new PixelPacker(packedBits);
+		} else {
+			LOG(0, "Bits are null");
+		}
+		TreasureMapImage image = new TreasureMapImage(treasureLoc, packer);
+		LOG(0,"Image is %s", image.isReady()? "READY" : "WAITING");
+		view.addRenderer(new TreasureMapRenderer(item, image, treasureLoc));
 
-		meta.setMapView(view);
-
-		
 		meta.setMapView(view);
 		item.setItemMeta(meta);
 	}
@@ -257,13 +274,13 @@ public class TreasureMapManager implements Listener {
 				
 		if( foundPlace ) {
 			LOG(0,"Found location for treasure at (%d, %d, %d)", chestLocation.getBlockX(), chestLocation.getBlockY(), chestLocation.getBlockZ());
-			spawnTreasureMarker(chestLocation);
-		} else {
-			LOG(0,"No location found for treasure");
-			return null;
+			Chunk chunk = world.getChunkAt(chestLocation.getBlockX(), chestLocation.getBlockZ(), true);  //ensure chunk exists so map doesn't break
+			ItemStack map = new TreasureMap(chestLocation).createItemStack();
+			new TreasureChest(map, chestLocation);
+			return map;
 		}
-		ItemStack map = new TreasureMap(chestLocation).createItemStack();
-		return map;
+		LOG(0,"No location found for treasure");
+		return null;
 	}
 
 
@@ -308,7 +325,10 @@ public class TreasureMapManager implements Listener {
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		for(ItemStack item : event.getPlayer().getInventory().getContents()) {
-			repairTreasureMap(item);
+			if( item != null ) {
+				LOG(0,"Fixing %s", item.getType());
+				repairTreasureMap(item);
+			}
 		}
 	}
 
@@ -328,14 +348,6 @@ public class TreasureMapManager implements Listener {
 	/**********************************************
    *        Private API                         *
 	 *********************************************/
-	//this will be replaced with an interaction
-	//that will trigger mobs when a player gets close and only
-	//when that happens will the loot chest actually be generated.
-	private void spawnTreasureMarker(Location loc) {
-		loc.clone().add(0,1,0).getBlock().setType(Material.OAK_FENCE);
-		loc.clone().add(0,2,0).getBlock().setType(Material.SKELETON_SKULL);
-	}
-
 	private boolean canBlockHoldTreasureChest(Block block) {
 		if( !block.isSolid()) {
 			return false;
@@ -422,5 +434,12 @@ public class TreasureMapManager implements Listener {
 			return visible.get(which);
 		}
 		return null;
+	}
+
+	private boolean isDMCChestComponent(Entity entity) {
+		Boolean b = entity.getPersistentDataContainer().get(Constants.DMC_TREASURE_COMPONENT, PersistentDataType.BOOLEAN);
+		if( b != null )
+			return b;
+		return false;
 	}
 }

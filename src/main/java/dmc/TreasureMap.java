@@ -52,7 +52,9 @@ public class TreasureMap {
 			view.removeRenderer(renderer);
 		}
 
-		view.addRenderer(new TreasureMapRenderer(treasureLoc));
+		TreasureMapImage image = new TreasureMapImage(treasureLoc);
+
+		view.addRenderer(new TreasureMapRenderer(map, image, treasureLoc));
 
 		meta.setMapView(view);
 		meta.displayName(Component.text("A soggy pirate's treasure map"));
