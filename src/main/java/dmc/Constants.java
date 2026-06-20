@@ -23,18 +23,24 @@ public class Constants {
 	static public final String DMC_BARREL_ITEM_TYPE = "dmc_barrel_item_type";
 	static public final String DMC_MAP_ITEM_TYPE = "dmc_map_item_type";
 	static public final String DMC_CD_ITEM_TYPE = "dmc_cd_item_type";  //composite display
+	static public final String DMC_TREASURE_MARKER_ITEM_TYPE = "dmc_treasure_marker_item_type";
 
 	static public final NamespacedKey DMC_BARREL_ID_KEY = new NamespacedKey(NAME_SPACE,"dmc_barrel_id_key");
 	static public final NamespacedKey DMC_MAP_ID_KEY = new NamespacedKey(NAME_SPACE, "dmc_map_id_key");
 	static public final NamespacedKey DMC_CD_ID_KEY = new NamespacedKey(NAME_SPACE, "dmc_cd_id_key");
 	static public final NamespacedKey DMC_TREASURE_COMPONENT = new NamespacedKey(NAME_SPACE, "dmc_treasure_component");
-	
+	static public final NamespacedKey DMC_TREASURE_MARKER_ID_KEY = new NamespacedKey(NAME_SPACE, "dmc_treasure_marker_id_key");
+
 	static public final NamespacedKey DMC_MAP_WORLD_ID = new NamespacedKey(NAME_SPACE, "dmc_map_world_id");
 	static public final NamespacedKey DMC_TREASURE_X_VAL =  new NamespacedKey(NAME_SPACE, "dmc_treasure_x_id");
 	static public final NamespacedKey DMC_TREASURE_Y_VAL =  new NamespacedKey(NAME_SPACE, "dmc_treasure_y_id");
 	static public final NamespacedKey DMC_TREASURE_Z_VAL =  new NamespacedKey(NAME_SPACE, "dmc_treasure_z_id");
-	static public final NamespacedKey DMC_TREASURE_CLAIMED = new NamespacedKey(NAME_SPACE, "dmc_treasure_claimed");
-	static public final NamespacedKey DMC_MAP_PIXELS = new NamespacedKey(NAME_SPACE, "dmc_map_pixels");
+	static public final NamespacedKey DMC_TREASURE_LEVEL = new NamespacedKey(NAME_SPACE, "dmc_treasure_level");
+
+	static public final NamespacedKey DMC_TREASURE_MARKER_CREATED = new NamespacedKey(NAME_SPACE, "dmc_treasure_marker_created");
+
+	static public final NamespacedKey DMC_TREASURE_MAP_PIXELS = new NamespacedKey(NAME_SPACE, "dmc_treasure_map_pixels");
+	static public final NamespacedKey DMC_TREASURE_MAP_PIXEL_FORMAT = new NamespacedKey(NAME_SPACE, "dmc_treasure_map_pixel_format");
 
 
 	//color constants

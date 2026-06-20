@@ -14,29 +14,46 @@ import static dmc.DeadMansChestPlugin.LOG;
 
 public class Configuration {
 	static public final boolean DEBUG_ON_DEFAULT = false;
-	static public final int     BARREL_SPAWN_CHECK_SECONDS = 30;
+	static public final int     BARREL_SPAWN_CHECK_SECONDS = 5; //30;
 	static public final int     MAX_BARRELS_SPAWNED = 30;
 	static public final int     MIN_DISTANCE_BETWEEN_BARRELS = 128;
 
 	final DeadMansChestPlugin plugin;
-	boolean debugOn = DEBUG_ON_DEFAULT;
-	int barrelSpawnCheckSeconds = BARREL_SPAWN_CHECK_SECONDS;
-	int maxBarrelsSpawned = MAX_BARRELS_SPAWNED;
-	int minDistanceBetweenBarrels = MIN_DISTANCE_BETWEEN_BARRELS;
+	private boolean debugOn = DEBUG_ON_DEFAULT;
+	private int barrelSpawnCheckSeconds = BARREL_SPAWN_CHECK_SECONDS;
+	private int maxBarrelsSpawned = MAX_BARRELS_SPAWNED;
+	private int minDistanceBetweenBarrels = MIN_DISTANCE_BETWEEN_BARRELS;
 
 	Configuration(DeadMansChestPlugin plugin) {
 		this.plugin = plugin;
 		loadConfiguration();
 	}
 
-	void showInfo() {
+	public boolean isDebugOn() {
+		return this.debugOn;
+	}
+	
+	public int getBarrelSpawnCheckSeconds() {
+		return this.barrelSpawnCheckSeconds;
+	}
+	public int getMaxBarrelsSpawned() {
+		return this.maxBarrelsSpawned;
+	}
+	public int getMinDistanceBetweenBarrels() {
+		return this.minDistanceBetweenBarrels; 
+	}
+	
+
+
+	
+	public void showInfo() {
 		LOG(0,"Debug is " + (debugOn?"ON":"OFF"));
 		LOG(0,"Barrel spawn check in seconds is " + barrelSpawnCheckSeconds);
 		LOG(0,"Max barrels allowed is " + maxBarrelsSpawned);
 		LOG(0,"Min distance between barrels in blocks is " + minDistanceBetweenBarrels);
 	}
 
-	void loadConfiguration() {
+	public void loadConfiguration() {
 		FileConfiguration cfg = plugin.getConfig();
 		if( cfg == null ) {
 			LOG(1,"Configuration should not be null");
@@ -54,7 +71,7 @@ public class Configuration {
 	//allow overworld only for now
 	//may add a config for other worlds in the
 	//future
-	boolean isWorldAllowed(World world) {
+	public boolean isWorldAllowed(World world) {
 		return world.getEnvironment() == World.Environment.NORMAL;
 	}
 }

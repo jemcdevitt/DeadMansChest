@@ -14,3 +14,6 @@ commands:
   chest:
     description: Spawn a deadman's chest
     usage: "/deadmanschestplugin chest"
+  barrel:
+    description: Spawn a deadman's barrel
+    usage: "/deadmanschestplugin barrel"
