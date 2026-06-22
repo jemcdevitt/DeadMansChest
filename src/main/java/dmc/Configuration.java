@@ -14,7 +14,7 @@ import static dmc.DeadMansChestPlugin.LOG;
 
 public class Configuration {
 	static public final boolean DEBUG_ON_DEFAULT = false;
-	static public final int     BARREL_SPAWN_CHECK_SECONDS = 5; //30;
+	static public final int     BARREL_SPAWN_CHECK_SECONDS = 30;
 	static public final int     MAX_BARRELS_SPAWNED = 30;
 	static public final int     MIN_DISTANCE_BETWEEN_BARRELS = 128;
 

@@ -10,6 +10,7 @@ package dmc.treasure;
 
 import dmc.CompositeDisplay;
 import dmc.Constants;
+import dmc.ICompositeDisplayHolder;
 import dmc.utils.UtilFuncs;
 import java.util.UUID;
 import org.bukkit.Location;
@@ -17,7 +18,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Display;
 import org.joml.Vector3f;
 
-public class TreasureMarker {
+public class TreasureMarker implements ICompositeDisplayHolder {
 	final Location location;
 	final String uniqueId;
 	final int level;
@@ -30,16 +31,8 @@ public class TreasureMarker {
 		this.level = treasureLevel;
 		
 		Material levelGem = UtilFuncs.getMaterialForTreasureLevel(level);;
-		// if( level == 1 )
-		//  	levelGem = Material.LAPIS_BLOCK;
-		// else if( level == 2)
-		//  	levelGem = Material.EMERALD_BLOCK;
-		// else if( level == 3)
-		//  	levelGem = Material.REDSTONE_BLOCK;
-		// else
-		// 	levelGem = Material.GOLD_BLOCK;
 
-		marker = new CompositeDisplay(location, true, 1.0f, 1.0f)
+		marker = new CompositeDisplay(Constants.DMC_CD_TYPE_TREASURE_MARKER, location, true, 1.25f, 1.75f)
 			.addBlock(Material.DARK_OAK_FENCE,
 								new Vector3f(0.25f,0,0.25f),
 								new Vector3f(0, 0, 0),
@@ -108,7 +101,22 @@ public class TreasureMarker {
 			.spawn();
 	}
 
+	@Override
+	public CompositeDisplay getCompositeDisplay() {
+		return marker;
+	}
+	
+	public String getUniqueId() {
+		return this.uniqueId;
+	}
+	
 	public void removeFromWorld() {
 		marker.remove();
+	}
+	public Location getLocation() {
+		return location;
+	}
+	public int getTreasureLevel() {
+		return this.level;
 	}
 }

@@ -42,7 +42,7 @@ public class FloatingBarrel {
 
 		Material levelBand = UtilFuncs.getMaterialForTreasureLevel(level);
 		
-		this.barrel = new CompositeDisplay(loc,false,1.0f, 1.0f)
+		this.barrel = new CompositeDisplay(Constants.DMC_CD_TYPE_BARREL, loc,false,1.0f, 1.0f)
 			.addBlock(Material.BARREL,
 								new Vector3f(0,0,0),
 								new Vector3f(rx, 0, rz),

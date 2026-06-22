@@ -18,6 +18,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.World;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.BlockDisplay;
 import org.bukkit.entity.Display;
@@ -27,24 +28,32 @@ import org.bukkit.entity.ItemDisplay;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.util.BoundingBox;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 import static dmc.DeadMansChestPlugin.LOG;
 
-public class CompositeDisplay {
+public class CompositeDisplay implements ICompositeDisplayHolder {
+	final static double SEARCH_LIMIT_X = 5;
+	final static double SEARCH_LIMIT_Y = 5;
+	final static double SEARCH_LIMIT_Z = 5;
+	
 	final String uniqueId;
 	final boolean persistent;
 
-	float interactionWidth;
-	float interactionHeight;
+	boolean spawned = false;
+	double interactionWidth;
+	double interactionHeight;
 	Location location;
 	Interaction interaction;
 	List<DisplayPart> parts = new ArrayList<>();
 	List<KeyData> keyData = new ArrayList<>();
+	String compositeDisplayType;
 
 
-	public CompositeDisplay(Location loc, boolean persistent, float interactionWidth, float interactionHeight) {
+
+	public CompositeDisplay(String compositeDisplayType, Location loc, boolean persistent, double interactionWidth, double interactionHeight) {
 		this.uniqueId = UUID.randomUUID().toString();
 		this.persistent = persistent;
 		this.location = loc.clone();
@@ -52,17 +61,77 @@ public class CompositeDisplay {
 		this.location.setPitch(0);
 		this.interactionWidth = interactionWidth;
 		this.interactionHeight = interactionHeight;
+		this.compositeDisplayType = compositeDisplayType;
 	}
 
+	private CompositeDisplay(String uniqueId, String compositeDisplayType, Interaction interaction, List<Display> displays) {
+		LOG(0,"CD_init: reconstructing composite display for '%s' type '%s'", uniqueId, compositeDisplayType);
+		this.uniqueId = uniqueId;
+		this.compositeDisplayType = compositeDisplayType;
+		this.location = interaction.getLocation().clone();
+		this.interactionWidth = interaction.getWidth();
+		this.interactionHeight = interaction.getHeight();
+		this.persistent = interaction.isPersistent();
+		this.interaction = interaction;
+
+		if( this.interaction == null ) {
+			LOG(0,"CD_init: Interaction is Null???????");
+		}
+
+		for(Display display : displays) {
+			parts.add(new DisplayPart(display));
+		}
+	}
+
+	@Override
+	public CompositeDisplay getCompositeDisplay() {
+		return this;
+	}
+	
+	public boolean isActive() {
+		if( this.interaction == null )
+			return false;
+
+		Boolean active = this.interaction.getPersistentDataContainer().get(Constants.DMC_CD_IS_ACTIVE_KEY, PersistentDataType.BOOLEAN);
+		if( active == null )
+			return true;
+		return active;
+	}
+
+	public CompositeDisplay setActive(boolean f) {
+		if( this.interaction == null ) {
+			LOG(0,"CD_setActive: no interaction");
+			return this;
+		}
+		this.interaction.getPersistentDataContainer().set(Constants.DMC_CD_IS_ACTIVE_KEY, PersistentDataType.BOOLEAN, f);
+		return this;
+	}
+	
+	public String getInteractionId() {
+		if( interaction == null )
+			return null;
+
+		return interaction.getUniqueId().toString();
+	}
+
+	public boolean isSpawned() {
+		return this.spawned;
+	}
+	
 	public CompositeDisplay spawn() {
-		if( this.interaction != null )
-			this.interaction.remove();
+		if( spawned )
+			return this;
+		
+		if( this.interaction != null ) {
+			remove();
+		}
+		
 		
 		this.interaction = this.location.getWorld().spawn(this.location, Interaction.class, it-> {
 				it.setPersistent(this.persistent);
 				it.setGravity(false);
-				it.setInteractionHeight(this.interactionHeight);
-				it.setInteractionWidth(this.interactionWidth);
+				it.setInteractionHeight((float)this.interactionHeight);
+				it.setInteractionWidth((float)this.interactionWidth);
 				it.setResponsive(true);
 			});
 		addKeys(this.interaction);
@@ -71,6 +140,8 @@ public class CompositeDisplay {
 			part.spawn(this.location, this.persistent);
 			addKeys(part.getEntity());
 		}
+
+		spawned = true;
 		return this;
 	}
 
@@ -111,30 +182,94 @@ public class CompositeDisplay {
 		this.location.setPitch(0);
 		this.interaction.teleport(this.location);
 		for(DisplayPart display : parts ) {
-			display.teleport(this.location);
+			display.moveTo(this.location);
 		}
 	}
 
 	public void remove() {
+		LOG(0,"CompositeDisplay: removing cd");
 		if( interaction != null ) {
 			this.interaction.remove();
 			this.interaction = null;
 		}
-		for(DisplayPart display : parts) {
-			display.remove();
+		if( parts != null && parts.size() != 0 ) {
+			for(DisplayPart display : parts) {
+				display.remove();
+			}
 		}
+		parts.clear();
 	}
 
 	private void addKeys(Entity entity) {
 		PersistentDataContainer pdc = entity.getPersistentDataContainer();
-		pdc.set(Constants.ITEM_TYPE_KEY, PersistentDataType.STRING, Constants.DMC_CD_ITEM_TYPE);
 		pdc.set(Constants.DMC_CD_ID_KEY, PersistentDataType.STRING, uniqueId);
+		pdc.set(Constants.DMC_CD_TYPE_KEY, PersistentDataType.STRING, compositeDisplayType);
 		for(KeyData data : keyData) {
 			data.set(pdc);
 		}
 			
 	}
 
+	/*
+	 * This will try to reconstitute a composite display given an interaction.
+	 */
+	public static CompositeDisplay reconstituteFromInteraction(String compositeDisplayType, Interaction interaction) {
+		if( interaction == null ) {
+			LOG(0,"CompositeDisplay: no interaction provided");
+			return null;
+		}
+		
+		if(!isCompositeDisplayEntity(compositeDisplayType, interaction)) {
+			LOG(0,"CompositeDisplay: interaction is not a composite display type");
+			return null;
+		}
+
+		//ok this is part of a CD so lets find all block and item displays with the same id number
+		String uniqueId = getCompositeDisplayUniqueId(interaction);
+		if( uniqueId == null ) {
+			LOG(0, "CompositeDisplay: interaction does not have a unique id string");
+			return null;
+		}
+
+
+		Location center = interaction.getLocation();
+		World world = interaction.getWorld();
+
+		// TODO for now all composite displays are kept withing a 1x1x1 bounding
+		// region, a single block. that could change but we'll limit our search
+		// for components
+		BoundingBox box = new BoundingBox(center.getBlockX() - SEARCH_LIMIT_X, center.getBlockY() - SEARCH_LIMIT_Y, center.getBlockZ() - SEARCH_LIMIT_Z,
+																			center.getBlockX() + SEARCH_LIMIT_X, center.getBlockY() + SEARCH_LIMIT_Y, center.getBlockZ() + SEARCH_LIMIT_Z);
+
+		List<Display> foundDisplayEntities = new ArrayList<>();
+		for(Entity entity : world.getNearbyEntities(box) ) {
+			if( entity instanceof Display display) {
+				if(isCompositeDisplayEntity(compositeDisplayType, display)) {
+					String id = getCompositeDisplayUniqueId(display);
+					if( uniqueId.equals(id)) {
+						foundDisplayEntities.add(display);
+					}
+				}
+			}
+		}
+
+		LOG(0,"CompositeDisplay: found %d Display entities", foundDisplayEntities.size());
+		CompositeDisplay cd = new CompositeDisplay(uniqueId, compositeDisplayType, interaction, foundDisplayEntities);
+		return cd;
+	}
+
+
+	static final public String getCompositeDisplayUniqueId(Entity entity) {
+		return entity.getPersistentDataContainer().get(Constants.DMC_CD_ID_KEY, PersistentDataType.STRING);
+	}
+	static final public boolean isCompositeDisplayEntity(String compositeDisplayType, Entity entity) {
+		String cdType = entity.getPersistentDataContainer().get(Constants.DMC_CD_TYPE_KEY, PersistentDataType.STRING);
+		LOG(0,"Checking if '%s' is '%s'", cdType, compositeDisplayType);
+		return compositeDisplayType.equals(cdType);
+	}
+
+
+	// ================ support classes ========================
 	static class DisplayPart {
 		private Display display;
 		private Material mat;
@@ -144,6 +279,17 @@ public class CompositeDisplay {
 		private boolean isBlock;
 		private Consumer<Display> userFunc;
 
+		DisplayPart(Display display) {
+			this.display = display;
+			if( display instanceof BlockDisplay bd) {
+				this.isBlock = true;
+				this.mat = bd.getBlock().getMaterial();
+			} else {
+				this.mat = ((ItemDisplay)display).getItemStack().getType();
+				this.isBlock = false;
+			}
+		}
+		
 		DisplayPart(Material mat, Vector3f pos, Vector3f rot, Vector3f scale, boolean isBlock) {
 			this.mat = mat;
 			this.pos = new Vector3f(pos);
@@ -165,7 +311,7 @@ public class CompositeDisplay {
 			return this.display;
 		}
 
-		void teleport(Location loc) {
+		void moveTo(Location loc) {
 			if(this.display != null)
 				this.display.teleport(loc);
 		}
@@ -208,7 +354,6 @@ public class CompositeDisplay {
 				});
 
 			if( userFunc != null ) {
-				LOG(0,"Custom updates to the block: " + mat.toString());
 				userFunc.accept(this.display);
 			}
 			
@@ -233,7 +378,6 @@ public class CompositeDisplay {
 					bd.setTransformationMatrix(xform);
 				});
 			if( userFunc != null ) {
-				LOG(0,"Custom updates to the item: " + mat.toString());
 				userFunc.accept(this.display);
 			}
 		}

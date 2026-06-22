@@ -110,7 +110,7 @@ public class TreasureMapManager implements Listener {
 			if( map != null ) {
 				if( map != null && player != null ) {
 					player.getInventory().addItem(map);
-					new TreasureMarker(chestLocation, treasureLevel);
+					plugin.getTreasureManager().createTreasureMarker(map);
 				}
 			} else {
 				LOG(1,player,"There was an error generating the treasure location");

@@ -9,6 +9,9 @@ package dmc;
 
 import dmc.barrel.BarrelManager;
 import dmc.map.TreasureMapManager;
+import dmc.treasure.TreasureChest;
+import dmc.treasure.TreasureManager;
+import dmc.utils.UtilFuncs;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -27,6 +30,7 @@ import org.bukkit.block.data.type.Light;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Display;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
@@ -47,7 +51,8 @@ public class DeadMansChestPlugin extends JavaPlugin {
 	public static Random RNG;
 	public static Configuration configuration;
 	public BarrelManager barrelManager;
-	public TreasureMapManager mapManager; 
+	public TreasureMapManager mapManager;
+	public TreasureManager treasureManager;
 
 	@Override
 	public void onEnable() {
@@ -65,6 +70,9 @@ public class DeadMansChestPlugin extends JavaPlugin {
 
 		mapManager = new TreasureMapManager(this);
 		getServer().getPluginManager().registerEvents(mapManager, this);
+
+		treasureManager = new TreasureManager(this);
+		getServer().getPluginManager().registerEvents(treasureManager, this);
 
 		// new BukkitRunnable() {
 		// 	@Override
@@ -93,6 +101,9 @@ public class DeadMansChestPlugin extends JavaPlugin {
 	public TreasureMapManager getMapManager() {
 		return this.mapManager;
 	}
+	public TreasureManager getTreasureManager() {
+		return this.treasureManager;
+	}
 
 	@Override
 	public void onDisable() {
@@ -109,16 +120,22 @@ public class DeadMansChestPlugin extends JavaPlugin {
 		}
 
 		if(commandName.equalsIgnoreCase("flush")) {
-			barrelManager.flushAllBarrels();
-			barrelManager.flushAllTreasureChests(player.getLocation().getWorld());
+			for(Entity entity : player.getWorld().getEntities()) {
+				if( UtilFuncs.isDMCComponent(entity)) {
+					LOG(0,"Removing entity %s", UtilFuncs.getDMCComponentType(entity));
+					entity.remove();
+				}
+			}
+//			barrelManager.flushAllBarrels();
 		}
 		if(commandName.equalsIgnoreCase("info")) {
 			barrelManager.showAllBarrels(player);
 		}
+		
 		if( commandName.equalsIgnoreCase("barrel")) {
 			Location pl = player.getLocation();
 			Location bl = new Location(pl.getWorld(), pl.getBlockX() + 1, pl.getBlockY(), pl.getBlockZ() + 1);
-			CompositeDisplay testDisplay = new CompositeDisplay(bl, false, 1.0f, 1.0f)
+			CompositeDisplay testDisplay = new CompositeDisplay(Constants.DMC_CD_TYPE_BARREL, bl, false, 1.0f, 1.0f)
 				.addBlock(Material.DARK_OAK_FENCE,
 									new Vector3f(0.25f,0,0.25f),
 									new Vector3f(0, 0, 0),
@@ -185,7 +202,7 @@ public class DeadMansChestPlugin extends JavaPlugin {
 		if(commandName.equalsIgnoreCase("chest")) {
 			
 			Location pl = player.getLocation();
-			new TreasureChest(new Location(pl.getWorld(), pl.getBlockX(), pl.getBlockY(), pl.getBlockZ()));
+			new TreasureChest(new Location(pl.getWorld(), pl.getBlockX(), pl.getBlockY(), pl.getBlockZ()), 3).spawn();
 		}
 
 		return true;

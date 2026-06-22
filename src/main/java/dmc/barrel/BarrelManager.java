@@ -70,17 +70,11 @@ public class BarrelManager implements Listener {
 	}
 
 	public void flushAllBarrels() {
+		LOG(0,"BarrelManager: flushing all %d barrels", barrels.size());
 		for(FloatingBarrel barrel : barrels.values() ) {
 			barrel.removeFromWorld();
 		}
 		barrels.clear();
-	}
-	public void flushAllTreasureChests(World world) {
-		for(Entity entity : world.getEntities()) {
-			if( isDMCBarrelComponent(entity)) {
-				entity.remove();
-			}
-		}
 	}
 
 	public void showAllBarrels(Player player) {
@@ -94,7 +88,7 @@ public class BarrelManager implements Listener {
 	 *********************************************/
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEntityEvent event) {
-		LOG(0,"onPlayerInteract");
+		LOG(0,"BarrelManager:onPlayerInteract");
 		if( !(event.getRightClicked() instanceof Interaction inter)) {
 			LOG(0,"Not an interaction");
 			return;
@@ -190,13 +184,6 @@ public class BarrelManager implements Listener {
 				}
 			}
 		}
-	}
-
-	private boolean isDMCBarrelComponent(Entity entity) {
-		Boolean b = entity.getPersistentDataContainer().get(Constants.DMC_TREASURE_COMPONENT, PersistentDataType.BOOLEAN);
-		if( b != null )
-			return b;
-		return false;
 	}
 
 	//currently this is a global maximum across all

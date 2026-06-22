@@ -32,6 +32,7 @@ public class TreasureMapData {
 	int treasureZ;
 	int treasureLevel;
 	boolean treasureMarkerCreated;
+	String treasureMarkerUniqueId;
 	byte[] packedBits;
 
 
@@ -52,6 +53,16 @@ public class TreasureMapData {
 	public UUID getWorldId() {
 		return this.worldId;
 	}
+	public int getTreasureX() {
+		return this.treasureX;
+	}
+	public int getTreasureY() {
+		return this.treasureY;
+	}
+	public int getTreasureZ() {
+		return this.treasureZ;
+	}
+	
 	public byte[] getPackedBits() {
 		return this.packedBits;
 	}
@@ -59,6 +70,18 @@ public class TreasureMapData {
 		this.packedBits = Arrays.copyOf(bits, bits.length);
 	}
 
+	public void setTreasureMarkerUniqueId(String id) {
+		this.treasureMarkerUniqueId = id;
+	}
+
+	public String getTreasureMarkerUniqueId() {
+		return this.treasureMarkerUniqueId;
+	}
+	
+	public boolean wasTreasureMarkerCreated() {
+		return this.treasureMarkerCreated;
+	}
+	
 	public void setTreasureMarkerCreated(boolean f) {
 		this.treasureMarkerCreated = f;
 	}
@@ -93,10 +116,14 @@ public class TreasureMapData {
 		pdc.set(Constants.DMC_TREASURE_Z_VAL, PersistentDataType.INTEGER, treasureZ);
 		pdc.set(Constants.DMC_TREASURE_LEVEL, PersistentDataType.INTEGER, treasureLevel);
 		pdc.set(Constants.DMC_TREASURE_MARKER_CREATED, PersistentDataType.BOOLEAN, treasureMarkerCreated);
+		if( treasureMarkerUniqueId != null )
+			pdc.set(Constants.DMC_TREASURE_MARKER_ID_KEY, PersistentDataType.STRING, treasureMarkerUniqueId);
+		
 		if( packedBits != null )
 			pdc.set(Constants.DMC_TREASURE_MAP_PIXELS, PersistentDataType.BYTE_ARRAY, packedBits);
 
-		meta.setMapView(view);
+		if( view != null )
+			meta.setMapView(view);
 		item.setItemMeta(meta);
 	}
 	
@@ -126,6 +153,7 @@ public class TreasureMapData {
 		Integer z = pdc.get(Constants.DMC_TREASURE_Z_VAL, PersistentDataType.INTEGER);
 		Integer level = pdc.get(Constants.DMC_TREASURE_LEVEL, PersistentDataType.INTEGER);
 		Boolean markerCreated = pdc.get(Constants.DMC_TREASURE_MARKER_CREATED, PersistentDataType.BOOLEAN);
+		String treasureMarkerId = pdc.get(Constants.DMC_TREASURE_MARKER_ID_KEY, PersistentDataType.STRING);
 		byte[] packedBits = pdc.get(Constants.DMC_TREASURE_MAP_PIXELS, PersistentDataType.BYTE_ARRAY);
 
 		if( mapId == null ||
@@ -157,6 +185,8 @@ public class TreasureMapData {
 		TreasureMapData data = new TreasureMapData(mapId, worldId, x, y, z, level, markerCreated);
 		if( packedBits != null )
 			data.setPackedBits(packedBits);
+		if( treasureMarkerId != null )
+			data.setTreasureMarkerUniqueId(treasureMarkerId);
 		return data;
 	}
 }
