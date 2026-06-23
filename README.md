@@ -109,13 +109,10 @@ Maybe bring iron blocks and pumpkins if you like solving problems the Minecraft 
 
 ## Screenshots and Videos
 
-Add your media here as the project page comes together.
-
 ### Finding a Barrel
 
-```markdown
-![Finding a floating treasure barrel](images/finding-barrel.png)
-```
+<img src="images/finding-barrel.png" width="300" alt="Recieving a soggy pirate map"/>
+
 
 ### Receiving a Soggy Map
 
