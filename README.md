@@ -144,14 +144,12 @@ Maybe bring iron blocks and pumpkins if you like solving problems the Minecraft 
 <img src="images/loot.png" width="300" alt="Treasure loot"/> <img src="images/cleansing.png" width="300" alt="Curse cleansed"/>
 
 
-
-
 Video clips are especially useful for this plugin because much of the appeal is in the animation and atmosphere:
 
-* <video src="videos/FindingTheMap.mp4" controls width="800">Watching the soggy map reveal</video>
-* <video src="videos/TheTreasureMarker.mp4" controls width="800">Reaching the marker and triggering the guardians</video>
-* <video src="videos/TheChestReveal.mp4" controls width="800">The chest is revealed</video>
-* <video src="videos/TheLoot.mp4" controls width="800">Getting the loot and cleansing the location</video>
+<video src="videos/FindingTheMap.mp4" controls width="800">Watching the soggy map reveal</video>
+<video src="videos/TheTreasureMarker.mp4" controls width="800">Reaching the marker and triggering the guardians</video>
+<video src="videos/TheChestReveal.mp4" controls width="800">The chest is revealed</video>
+<video src="videos/TheLoot.mp4" controls width="800">Getting the loot and cleansing the location</video>
 
 ---
 
