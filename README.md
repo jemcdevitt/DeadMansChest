@@ -1,3 +1,4 @@
+
 <p align="center">
   <img src="images/DeadMansChest.png" width="160" alt="Dead Man's Chest logo">
 </p>
@@ -146,10 +147,22 @@ Maybe bring iron blocks and pumpkins if you like solving problems the Minecraft 
 
 Video clips are especially useful for this plugin because much of the appeal is in the animation and atmosphere:
 
-<video src="videos/FindingTheMap.mp4" controls width="800">Watching the soggy map reveal</video>
-<video src="videos/TheTreasureMarker.mp4" controls width="800">Reaching the marker and triggering the guardians</video>
-<video src="videos/TheChestReveal.mp4" controls width="800">The chest is revealed</video>
-<video src="videos/TheLoot.mp4" controls width="800">Getting the loot and cleansing the location</video>
+<p align="center">
+  <video src="https://github.com/user-attachments/assets/c6ab1023-3e56-4a93-958c-96edd017caf0" controls width="800"></video>
+  <em>Watching the soggy map reveal</em>
+</p>  
+<p align="center">
+<video src="https://github.com/user-attachments/assets/d4b9aff1-432a-4ac9-bef8-e37c1129fd21" controls width="800"></video>
+  <em>Reaching the marker and triggering the guardians</em>
+</p>
+<p align="center">
+<video src="https://github.com/user-attachments/assets/f010ead1-b62f-4efd-9a9f-c3da5f91acfa" controls width="800"></video>
+  <em>The chest is revealed</em>
+</p>
+<p align="center">
+<video src="https://github.com/user-attachments/assets/082967b9-5e6f-4c7d-8f9c-fd16113f4c05" controls width="800"></video>
+  <em>Getting the loot and cleansing the location</em>
+</p>
 
 ---
 
