@@ -48,7 +48,6 @@ public class GuardiansTracker {
 	private void setGuardianList() {
 		PersistentDataContainer pdc = marker.getPersistentDataContainer();
 		String composite = GuardiansTracker.buildCompositeList(this.guardians);
-		LOG(0,"Setting list '%s'", composite);
 		pdc.set(Constants.DMC_TREASURE_MARKER_GUARDIAN_LIST, PersistentDataType.STRING, composite);
 		pdc.set(Constants.DMC_TREASURE_MARKER_GUARDIAN_LIST_COUNT, PersistentDataType.INTEGER, getGuardianCount());
 	}
@@ -61,7 +60,6 @@ public class GuardiansTracker {
 		String guardianList = pdc.get(Constants.DMC_TREASURE_MARKER_GUARDIAN_LIST, PersistentDataType.STRING);
 		String markerId = pdc.get(Constants.DMC_TREASURE_MARKER_ID_KEY, PersistentDataType.STRING);
 
-		LOG(0,"Guardian List: '%s'", guardianList);
 		
 		Set<String> guardians = decomposeCompositeList(guardianList);
 		GuardiansTracker gd = new GuardiansTracker(guardians, marker, markerId);
@@ -84,9 +82,8 @@ public class GuardiansTracker {
 	static public Set<String> decomposeCompositeList(String list) {
 		String[] parts = list.split("\\|");
 		HashSet<String> set = new HashSet<>();
-		LOG(0,"GT: %d parts in %s", parts.length, list);
+
 		for(String part : parts) {
-			LOG(0,"GT: adding part '%s'", part);
 			if(part != null && part.trim().length() != 0 ) {
 				set.add(part);
 			}

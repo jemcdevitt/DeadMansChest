@@ -2,3 +2,109 @@
 
 debug: true
 
+loot:
+  remove-defaults: false
+
+  level-1:
+    rolls: 4
+    remove:
+      - minecraft:cooked_cod
+    add:
+      - material: minecraft:copper_ingot
+        min: 4
+        max: 12
+        weight: 12
+
+  level-2:
+    rolls: 6
+    book-chance-percent: 18
+    remove: []
+    add:
+      - material: minecraft:lapis_lazuli
+        min: 4
+        max: 16
+        weight: 8
+    add-books:
+      - enchantment: minecraft:mending
+        level: 1
+        weight: 1
+      - enchantment: minecraft:fortune
+        level: 2
+        weight: 2
+      - enchantment: minecraft:efficiency
+        level: 4
+        weight: 2
+    custom:
+      - material: minecraft:iron_sword
+        name: "Cursed Raider's Cutlass"
+        min: 1
+        max: 1
+        weight: 2
+        enchants:
+          - enchantment: minecraft:sharpness
+            level: 3
+          - enchantment: minecraft:vanishing_curse
+            level: 1
+      - material: minecraft:iron_chestplate
+        name: "Salt-Stained Breastplate"
+        min: 1
+        max: 1
+        weight: 2
+        enchants:
+          - enchantment: minecraft:protection
+            level: 3
+          - enchantment: minecraft:binding_curse
+            level: 1
+        
+  level-3:
+    rolls: 8
+    book-chance-percent: 35
+    remove:
+      - minecraft:enchanted_golden_apple
+    add:
+      - material: minecraft:diamond
+        min: 2
+        max: 5
+        weight: 8
+      - material: minecraft:trident
+        min: 1
+        max: 1
+        weight: 1
+    add-books:
+      - enchantment: minecraft:mending
+        level: 1
+        weight: 2
+      - enchantment: minecraft:fortune
+        level: 3
+        weight: 3
+      - enchantment: minecraft:efficiency
+        level: 5
+        weight: 4
+      - enchantment: minecraft:protection
+        level: 4
+        weight: 4
+      - enchantment: minecraft:sharpness
+        level: 5
+        weight: 4
+    custom:
+      - material: minecraft:diamond_sword
+        name: "Dead Man's Blade"
+        min: 1
+        max: 1
+        weight: 1
+        enchants:
+          - enchantment: minecraft:sharpness
+            level: 5
+          - enchantment: minecraft:fire_aspect
+            level: 2
+      - material: minecraft:diamond_pickaxe
+        name: "Buried King's Pick"
+        min: 1
+        max: 1
+        weight: 1
+        enchants:
+          - enchantment: minecraft:efficiency
+            level: 5
+          - enchantment: minecraft:fortune
+            level: 3
+            

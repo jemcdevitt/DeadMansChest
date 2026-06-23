@@ -65,7 +65,6 @@ public class CompositeDisplay implements ICompositeDisplayHolder {
 	}
 
 	private CompositeDisplay(String uniqueId, String compositeDisplayType, Interaction interaction, List<Display> displays) {
-		LOG(0,"CD_init: reconstructing composite display for '%s' type '%s'", uniqueId, compositeDisplayType);
 		this.uniqueId = uniqueId;
 		this.compositeDisplayType = compositeDisplayType;
 		this.location = interaction.getLocation().clone();
@@ -73,14 +72,19 @@ public class CompositeDisplay implements ICompositeDisplayHolder {
 		this.interactionHeight = interaction.getHeight();
 		this.persistent = interaction.isPersistent();
 		this.interaction = interaction;
+		this.spawned = true;
 
-		if( this.interaction == null ) {
-			LOG(0,"CD_init: Interaction is Null???????");
-		}
 
 		for(Display display : displays) {
 			parts.add(new DisplayPart(display));
 		}
+	}
+
+	public Location getLocation() {
+		return this.location;
+	}
+	public World getWorld() {
+		return this.location.getWorld();
 	}
 
 	@Override
@@ -100,7 +104,6 @@ public class CompositeDisplay implements ICompositeDisplayHolder {
 
 	public CompositeDisplay setActive(boolean f) {
 		if( this.interaction == null ) {
-			LOG(0,"CD_setActive: no interaction");
 			return this;
 		}
 		this.interaction.getPersistentDataContainer().set(Constants.DMC_CD_IS_ACTIVE_KEY, PersistentDataType.BOOLEAN, f);
@@ -180,14 +183,14 @@ public class CompositeDisplay implements ICompositeDisplayHolder {
 		this.location = loc.clone();
 		this.location.setYaw(0);
 		this.location.setPitch(0);
-		this.interaction.teleport(this.location);
+		if( interaction != null )
+			this.interaction.teleport(this.location);
 		for(DisplayPart display : parts ) {
 			display.moveTo(this.location);
 		}
 	}
 
 	public void remove() {
-		LOG(0,"CompositeDisplay: removing cd");
 		if( interaction != null ) {
 			this.interaction.remove();
 			this.interaction = null;
@@ -215,19 +218,16 @@ public class CompositeDisplay implements ICompositeDisplayHolder {
 	 */
 	public static CompositeDisplay reconstituteFromInteraction(String compositeDisplayType, Interaction interaction) {
 		if( interaction == null ) {
-			LOG(0,"CompositeDisplay: no interaction provided");
 			return null;
 		}
 		
 		if(!isCompositeDisplayEntity(compositeDisplayType, interaction)) {
-			LOG(0,"CompositeDisplay: interaction is not a composite display type");
 			return null;
 		}
 
 		//ok this is part of a CD so lets find all block and item displays with the same id number
 		String uniqueId = getCompositeDisplayUniqueId(interaction);
 		if( uniqueId == null ) {
-			LOG(0, "CompositeDisplay: interaction does not have a unique id string");
 			return null;
 		}
 
@@ -253,7 +253,6 @@ public class CompositeDisplay implements ICompositeDisplayHolder {
 			}
 		}
 
-		LOG(0,"CompositeDisplay: found %d Display entities", foundDisplayEntities.size());
 		CompositeDisplay cd = new CompositeDisplay(uniqueId, compositeDisplayType, interaction, foundDisplayEntities);
 		return cd;
 	}
@@ -264,7 +263,6 @@ public class CompositeDisplay implements ICompositeDisplayHolder {
 	}
 	static final public boolean isCompositeDisplayEntity(String compositeDisplayType, Entity entity) {
 		String cdType = entity.getPersistentDataContainer().get(Constants.DMC_CD_TYPE_KEY, PersistentDataType.STRING);
-		LOG(0,"Checking if '%s' is '%s'", cdType, compositeDisplayType);
 		return compositeDisplayType.equals(cdType);
 	}
 

@@ -158,8 +158,8 @@ public class TreasureMapRenderer extends MapRenderer {
 		double dx = player.getLocation().getX() - view.getCenterX();
 		double dz = player.getLocation().getZ() - view.getCenterZ();
 
-		int mapX = clamp((int)Math.round(dx / blocksPerPixel), -127, 127);
-		int mapZ = clamp((int)Math.round(dz / blocksPerPixel), -127, 127);
+		int mapX = UtilFuncs.clamp((int)Math.round(dx / blocksPerPixel), -127, 127);
+		int mapZ = UtilFuncs.clamp((int)Math.round(dz / blocksPerPixel), -127, 127);
 
 		byte direction = yawToMapDirection(player.getLocation().getYaw());
 		return new MapCursor((byte)mapX, (byte)mapZ, direction, MapCursor.Type.PLAYER, true);
@@ -194,8 +194,8 @@ public class TreasureMapRenderer extends MapRenderer {
 		}
 
 		return new int[] {
-			clamp((int)Math.round(mapX), -127, 127),
-			clamp((int)Math.round(mapZ), -127, 127)
+			UtilFuncs.clamp((int)Math.round(mapX), -127, 127),
+			UtilFuncs.clamp((int)Math.round(mapZ), -127, 127)
 		};
 	}
 
@@ -212,7 +212,7 @@ public class TreasureMapRenderer extends MapRenderer {
 
 	private Color getWetParchmentColor(int x, int y) {
 		int baseR = 156;
-		int baseG = 112;
+		int baseG = 166;  //112
 		int baseB = 84;
 
 		int noise = pseudoNoise(x, y);
@@ -227,7 +227,7 @@ public class TreasureMapRenderer extends MapRenderer {
 		g -= (int)(dark * 42f);
 		b -= (int)(dark * 30f);
 		
-		return new Color(clamp(r,0,255), clamp(g,0,255), clamp(b, 0,255));
+		return new Color(UtilFuncs.clamp(r,0,255), UtilFuncs.clamp(g,0,255), UtilFuncs.clamp(b, 0,255));
 	}
 
 	private int pseudoNoise(int x, int y) {
@@ -236,10 +236,6 @@ public class TreasureMapRenderer extends MapRenderer {
 		v ^= (v >>> 17);
 		v ^= (v << 5);
 		return Math.floorMod(v, 21) - 10;
-	}
-
-	private int clamp(int v, int min, int max) {
-		return Math.max(min,Math.min(max, v));
 	}
 
 	private float blobDarkness(int x, int y) {

@@ -88,17 +88,14 @@ public class BarrelManager implements Listener {
 	 *********************************************/
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEntityEvent event) {
-		LOG(0,"BarrelManager:onPlayerInteract");
 		if( !(event.getRightClicked() instanceof Interaction inter)) {
 			LOG(0,"Not an interaction");
 			return;
 		}
  		if(!Constants.DMC_BARREL_ITEM_TYPE.equals(inter.getPersistentDataContainer().get(Constants.ITEM_TYPE_KEY,PersistentDataType.STRING))) {
-			LOG(0,"Not a barrel");
 			return;
 		}
 		String id = inter.getPersistentDataContainer().get(Constants.DMC_BARREL_ID_KEY, PersistentDataType.STRING);
-		LOG(0,"Player interacted with barrel %s", id);
 
 		if(id == null ) {
 			LOG(1,"Barrel found without an id");
@@ -117,7 +114,8 @@ public class BarrelManager implements Listener {
 		player.getWorld().playSound(player, Sound.BLOCK_BAMBOO_BREAK, 2.0f, 0.5f);
 		Integer treasureLevel = inter.getPersistentDataContainer().get(Constants.DMC_TREASURE_LEVEL, PersistentDataType.INTEGER);
 		if( treasureLevel == null ) {
-			LOG(0,"Barrel didn't have a defined treasure level");
+			LOG(1,"Barrel didn't have a defined treasure level, defaulting to 1");
+			treasureLevel = 1;
 		}
 		
 		plugin.getMapManager().generateTreasureMap(player, barrel.getLocation(), treasureLevel);
@@ -146,7 +144,6 @@ public class BarrelManager implements Listener {
 		for(World world : plugin.getServer().getWorlds()) {
 			if( DeadMansChestPlugin.configuration.isWorldAllowed(world) ) {
 				for(Player player : world.getPlayers()) {
-					LOG(0,"Doing spawn check: %d of %d", barrels.size(), config.getMaxBarrelsSpawned());
 					if( hitMaxBarrels(world)) {
 						LOG(0,"Max barrels in world");
 						break;

@@ -10,6 +10,7 @@ import dmc.CompositeDisplay;
 import dmc.CompositeDisplayMover;
 import dmc.Constants;
 import dmc.DeadMansChestPlugin;
+import dmc.loot.LootManager;
 import dmc.map.TreasureMapData;
 import java.util.HashSet;
 import java.util.Set;
@@ -47,9 +48,11 @@ import static dmc.DeadMansChestPlugin.LOG;
 
 public class TreasureManager implements Listener {
 	final private DeadMansChestPlugin plugin;
+	final private LootManager lootManager;
 
-	public TreasureManager(DeadMansChestPlugin plugin) {
+	public TreasureManager(DeadMansChestPlugin plugin, LootManager lootManager) {
 		this.plugin = plugin;
+		this.lootManager = lootManager;
 	}
 
 	public void createTreasureMarker(ItemStack map) {
@@ -57,18 +60,14 @@ public class TreasureManager implements Listener {
 			return;
 		TreasureMapData mapData = TreasureMapData.fromItem(map);
 		if( mapData == null ) {
-			LOG(0,"createTreasureMarker: Was not a map");
 			return;
 		}
 		Location location = mapData.toLocation();
 		if( location == null ) {
-			LOG(0,"createTreasureMarker: location not found for map data");
 			return;
 		}
 
 		if( mapData.wasTreasureMarkerCreated()) {
-			LOG(0,"createTreasureMarker: treasure marker already created at (%d,%d,%d)",
-					mapData.getTreasureX(), mapData.getTreasureY(), mapData.getTreasureZ());
 			return;
 		}
 		
@@ -77,24 +76,17 @@ public class TreasureManager implements Listener {
 		mapData.setTreasureMarkerCreated(true);
 		mapData.setTreasureMarkerUniqueId(marker.getUniqueId());
 		mapData.setToItem(map, null);
-		LOG(0,"createTreasureMarker: Created treasure marker level %d at (%d,%d,%d)",
-				marker.getTreasureLevel(),
-				marker.getLocation().getBlockX(), marker.getLocation().getBlockY(), marker.getLocation().getBlockZ());
-
 	}
 
 
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEntityEvent event) {
-		LOG(0,"TreasureManager:onPlayerInteract");
 		if( !(event.getRightClicked() instanceof Interaction inter)) {
-			LOG(0,"TreasureManager:Not an interaction");
 			return;
 		}
 
 		Boolean b = inter.getPersistentDataContainer().get(Constants.DMC_CD_IS_ACTIVE_KEY, PersistentDataType.BOOLEAN);
 		if(b != null && b == false) {
-			LOG(0,"TM_opi: interaction is not active");
 			return;
 		}
 		
@@ -107,45 +99,37 @@ public class TreasureManager implements Listener {
 	}
 
 	private void processTreasureChestInteraction(Interaction inter, Player player) {
-		LOG(0,"TM_ptci: is this a treasure chest");
 		PersistentDataContainer pdc = inter.getPersistentDataContainer();
 		CompositeDisplay treasureChest = CompositeDisplay.reconstituteFromInteraction(Constants.DMC_CD_TYPE_TREASURE_CHEST, inter);
 		if( treasureChest == null ) {
-			LOG(0,"TM_ptci: Failed to restore composite display");
 			return;
 		}
 
 		Integer level = pdc.get(Constants.DMC_TREASURE_LEVEL, PersistentDataType.INTEGER);
 		if( level == null ) {
-			LOG(0,"TM_ptci: no treasure level provided, setting to 2");
 			level = 2;
 		}
-		
-		LOG(0,"TM_ptci: give player level %d treasure", level);
-		treasureChest.remove();
+
+		lootManager.openTreasureChest(player, inter, treasureChest, level);
 	}
 		
 	private void processTreasureMarkerInteraction(Interaction inter, Player player) {
 		PersistentDataContainer pdc = inter.getPersistentDataContainer();
 		
 		String id = pdc.get(Constants.DMC_TREASURE_MARKER_ID_KEY, PersistentDataType.STRING);
-		LOG(0,"TreasureManager:Player interacted with treasure marker %s", id);
 
 		
 		Integer treasureLevel = pdc.get(Constants.DMC_TREASURE_LEVEL, PersistentDataType.INTEGER);
 		if( treasureLevel == null ) {
-			LOG(0,"TreasureManager: treasureLevel is %s not set");
-			// TODO should we default?
 			return;
 		}
-		LOG(0, "TreasureManager: treasureLevel is %d",treasureLevel);
+
 		Set<String> guardians = spawnGuardians(treasureLevel, inter, player);
 
 		if( guardians == null || guardians.size() == 0 ) {
 			allGuardiansDefeated(inter);
 		} else {
 			GuardiansTracker guardiansTracker = new GuardiansTracker(guardians, inter, id);
-			guardiansTracker.showInfo();
 		}
 
 		//time to fight
@@ -170,23 +154,18 @@ public class TreasureManager implements Listener {
 		}
 		
 		
-		LOG(0,"Found a guardian, id: %s attached to %s", guardianId, interactionId);
 		Entity markerEntity = entity.getWorld().getEntity(interactionUUID);
 		if( markerEntity == null ) {
-			LOG(0,"TM:No marker found matching uuid %s", interactionId);
 			return;
 		}
 		if(!(markerEntity instanceof Interaction marker)) {
-			LOG(0,"TM:marker isn't an Interaction");
 			return;
 		}
 		GuardiansTracker gdt = GuardiansTracker.buildFromInteraction(marker);
 		if( gdt == null ) {
-			LOG(0,"TM: no guardian tracker available");
 			return;
 		}
 		gdt.guardianDefeated(guardianId);
-		gdt.showInfo();
 
 		if(gdt.getGuardianCount() == 0 ) {
 			allGuardiansDefeated(marker);
@@ -203,20 +182,19 @@ public class TreasureManager implements Listener {
 
 		Integer treasureLevel = marker.getPersistentDataContainer().get(Constants.DMC_TREASURE_LEVEL, PersistentDataType.INTEGER);
 		if( treasureLevel == null ) {
-			LOG(0,"No treasure level found in marker, setting to 2");
 			treasureLevel = 2;
 		}
 
 		Location markerLocation = marker.getLocation();
 		CompositeDisplayMover treasureMarkerMover = new CompositeDisplayMover("marker", treasureMarker.setActive(false), markerLocation.clone(), markerLocation.clone().add(0, -2, 0), 8_000)
 			.setSound(Sound.BLOCK_SOUL_SAND_BREAK, markerLocation)
-			.setParticle(Material.SOUL_SAND.createBlockData(), markerLocation);
+			.setParticle(Particle.BLOCK, Material.SOUL_SAND.createBlockData(), markerLocation);
 		
 		CompositeDisplayMover treasureChestMover = new CompositeDisplayMover("chest", new TreasureChest(markerLocation.clone().add(0,-1.5,0), treasureLevel),
 																																						markerLocation.clone().add(0,-1.5,0), markerLocation.clone(),	6_000, true)
 			.setSound(Sound.BLOCK_SOUL_SAND_BREAK, markerLocation)
-			.setParticle(Material.SOUL_SAND.createBlockData(), markerLocation)
-			.setFinishCallback((cd)->{ cd.setActive(true); LOG(0,"callback: setting composite display to active");});
+			.setParticle(Particle.BLOCK, Material.SOUL_SAND.createBlockData(), markerLocation)
+			.setFinishCallback((cd)->{ cd.setActive(true);});
 									 
 
 		new BukkitRunnable() {
@@ -238,6 +216,7 @@ public class TreasureManager implements Listener {
 				} else if(!treasureChestMover.isDone()) {
 					treasureChestMover.update(delta);
 				} else {
+					treasureChestMover.moveToEnd();
 					cancel();
 					end();
 				}
@@ -277,7 +256,6 @@ public class TreasureManager implements Listener {
 		CompositeDisplay treasureMarker =  CompositeDisplay.reconstituteFromInteraction(Constants.DMC_CD_TYPE_TREASURE_MARKER, marker);
 		Boolean alreadySpawned = marker.getPersistentDataContainer().get(Constants.DMC_TREASURE_MARKER_GUARDIANS_SPAWNED, PersistentDataType.BOOLEAN);
 		if( alreadySpawned != null && alreadySpawned ) {
-			LOG(0,"TreasureManager:This marker has already spawned guardians, it is in a bad state-removing");
 			if(treasureMarker != null )
 				treasureMarker.remove();
 			else

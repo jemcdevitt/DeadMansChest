@@ -8,12 +8,16 @@ commands:
   info:
     description: Dumps info on all existing barrels to log
     usage: "/deadmanschestplugin info"
+    permision: deadmanschest.info.use
   flush:
     description: Removes all existing barrels
     usage: "/deadmanschestplugin flush"
-  chest:
-    description: Spawn a deadman's chest
-    usage: "/deadmanschestplugin chest"
-  barrel:
-    description: Spawn a deadman's barrel
-    usage: "/deadmanschestplugin barrel"
+    permission: deadmanschest.flush.use
+
+permissions:
+  deadmanschest.info.use:
+    description: Dumps a list of barrels that currently exist
+    default: op
+  deadmanschest.flush.use:
+    description: Will remove all DMC components in the world except maps
+    default: op

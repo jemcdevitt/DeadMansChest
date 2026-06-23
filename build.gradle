@@ -90,6 +90,10 @@ shadowJar {
 jar.enabled = false
 assemble.dependsOn(shadowJar)
 
+tasks.withType(JavaCompile) {
+    options.deprecation = true
+}
+
 tasks.register('printProjectName') {
     doLast {
         println rootProject.name

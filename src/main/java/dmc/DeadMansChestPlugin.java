@@ -8,6 +8,7 @@ package dmc;
  */
 
 import dmc.barrel.BarrelManager;
+import dmc.loot.LootManager;
 import dmc.map.TreasureMapManager;
 import dmc.treasure.TreasureChest;
 import dmc.treasure.TreasureManager;
@@ -53,6 +54,7 @@ public class DeadMansChestPlugin extends JavaPlugin {
 	public BarrelManager barrelManager;
 	public TreasureMapManager mapManager;
 	public TreasureManager treasureManager;
+	public LootManager lootManager;
 
 	@Override
 	public void onEnable() {
@@ -71,24 +73,12 @@ public class DeadMansChestPlugin extends JavaPlugin {
 		mapManager = new TreasureMapManager(this);
 		getServer().getPluginManager().registerEvents(mapManager, this);
 
-		treasureManager = new TreasureManager(this);
+		lootManager = new LootManager(this);
+		getServer().getPluginManager().registerEvents(lootManager, this);
+
+		treasureManager = new TreasureManager(this, lootManager);
 		getServer().getPluginManager().registerEvents(treasureManager, this);
 
-		// new BukkitRunnable() {
-		// 	@Override
-		// 	public void run() {
-		// 		barrelManager.spawnCheck();
-		// 	}
-		// }.runTaskTimer(this, 0, configuration.barrelSpawnCheckSeconds * 20);
-
-		// new BukkitRunnable() {
-		// 	@Override
-		// 	public void run() {
-		// 		barrelManager.update();
-		// 	}
-		// }.runTaskTimer(this, 0, Constants.UPDATE_TICKS);
-
-		
 		LOG(0,"Dead Man's Chest plugin startup");
 	}
 
@@ -126,85 +116,11 @@ public class DeadMansChestPlugin extends JavaPlugin {
 					entity.remove();
 				}
 			}
-//			barrelManager.flushAllBarrels();
+			barrelManager.flushAllBarrels();
 		}
 		if(commandName.equalsIgnoreCase("info")) {
 			barrelManager.showAllBarrels(player);
 		}
-		
-		if( commandName.equalsIgnoreCase("barrel")) {
-			Location pl = player.getLocation();
-			Location bl = new Location(pl.getWorld(), pl.getBlockX() + 1, pl.getBlockY(), pl.getBlockZ() + 1);
-			CompositeDisplay testDisplay = new CompositeDisplay(Constants.DMC_CD_TYPE_BARREL, bl, false, 1.0f, 1.0f)
-				.addBlock(Material.DARK_OAK_FENCE,
-									new Vector3f(0.25f,0,0.25f),
-									new Vector3f(0, 0, 0),
-									new Vector3f(0.5f, 1.0f, 0.5f))
-				.addItem(Material.WITHER_SKELETON_SKULL,
-								 new Vector3f(0.5f,1.4375f,0.5f),
-								 new Vector3f(0, 180f, 0),
-								 new Vector3f(1f, 1f, 1f),
-									(d) -> { d.setBrightness(new Display.Brightness(11,0)); })
-				//crown
-				.addBlock(Material.GOLD_BLOCK,
-									new Vector3f(0.25f, 1.4375f, 0.25f),
-									new Vector3f(0,0,0),
-									new Vector3f(0.5f, 0.05f, 0.5f))
-				.addBlock(Material.RAW_GOLD_BLOCK,
-									new Vector3f(0.25f, 1.4375f, 0.75f),
-									new Vector3f(0, 0, 0),
-									new Vector3f(0.05f, 0.15f, 0.05f))
-				.addBlock(Material.RAW_GOLD_BLOCK,
-									new Vector3f(0.45f, 1.4375f, 0.75f),
-									new Vector3f(0, 0, 0),
-									new Vector3f(0.1f, 0.175f, 0.05f))
-				.addBlock(Material.RAW_GOLD_BLOCK,
-									new Vector3f(0.6875f, 1.4375f, 0.75f),
-									new Vector3f(0,0,0),
-									new Vector3f(0.05f, 0.15f, 0.05f))
-				.addBlock(Material.EMERALD_BLOCK,
-									new Vector3f(0.45f, 1.61f, 0.75f),
-									new Vector3f(0,0,0),
-									new Vector3f(0.1f, 0.1f, 0.05f),
-									(d) -> { d.setBrightness(new Display.Brightness(15,0)); })
-				.addBlock(Material.AMETHYST_BLOCK,
-									new Vector3f(0.25f, 1.586875f, 0.75f),
-									new Vector3f(0,0,0),
-									new Vector3f(0.05f, 0.05f, 0.05f),
-									(d) -> { d.setBrightness(new Display.Brightness(15,0)); })
-				.addBlock(Material.AMETHYST_BLOCK,
-									new Vector3f(0.6875f, 1.586875f, 0.75f),
-									new Vector3f(0,0,0),
-									new Vector3f(0.05f, 0.05f, 0.05f),
-									(d) -> { d.setBrightness(new Display.Brightness(15,0)); })
-				//decorations
-				.addItem(Material.SKELETON_SKULL,
-								 new Vector3f(0.25f, 0.25f, 0.5f),
-								 new Vector3f(0,215f,0),
-								 new Vector3f(0.5f, 0.5f, 0.5f))
-				.addItem(Material.SKELETON_SKULL,
-								 new Vector3f(0.75f, 0.25f, 0.5f),
-								 new Vector3f(0,135f,0),
-								 new Vector3f(0.5f, 0.5f, 0.5f))
-				.addBlock(Material.SOUL_FIRE,
-									new Vector3f(0.18f, 0.25f, 0.4375f),
-									new Vector3f(0,0,0),
-									new Vector3f(0.15f, 0.2f, 0.15f),
-									(d) -> { d.setBrightness(new Display.Brightness(15,0)); })
-				.addBlock(Material.SOUL_FIRE,
-									new Vector3f(0.68f, 0.25f, 0.4375f),
-									new Vector3f(0,0,0),
-									new Vector3f(0.15f, 0.2f, 0.15f),
-									(d) -> { d.setBrightness(new Display.Brightness(15,0)); })
-										
-				.spawn();
-		}
-		if(commandName.equalsIgnoreCase("chest")) {
-			
-			Location pl = player.getLocation();
-			new TreasureChest(new Location(pl.getWorld(), pl.getBlockX(), pl.getBlockY(), pl.getBlockZ()), 3).spawn();
-		}
-
 		return true;
 	}
 

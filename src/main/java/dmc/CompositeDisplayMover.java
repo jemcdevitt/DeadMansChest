@@ -12,6 +12,8 @@ import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.block.data.BlockData;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import static dmc.DeadMansChestPlugin.LOG;
 
@@ -25,8 +27,10 @@ public class CompositeDisplayMover {
 	Sound sound;
 	Location soundLocation;
 	
-	BlockData particle;
+	BlockData particleBlockData;
+	Particle particle;
 	Location particleLocation;
+	int particleCount;
 	
 	Consumer<CompositeDisplay> finishCallback;
 	
@@ -49,7 +53,7 @@ public class CompositeDisplayMover {
 		this.start = start.clone();
 		this.end = end.clone();
 		this.duration = milliSeconds;
-		this.spawnIfNeeded = true;
+		this.spawnIfNeeded = spawnIfNeeded;
 	}
 
 	public void update(long deltaMS) {
@@ -60,7 +64,6 @@ public class CompositeDisplayMover {
 			holder.getCompositeDisplay().spawn();
 		}
 		
-		LOG(0, "Mover %s: duration: %d, runTime: %d, delta: %d", id, duration, runTime, deltaMS);
 		runTime += deltaMS;
 		if( runTime >= duration ) {
 			done = true;
@@ -68,25 +71,35 @@ public class CompositeDisplayMover {
 				this.finishCallback.accept(holder.getCompositeDisplay());
 		} 
 		move();
-		if( this.sound != null )
-			end.getWorld().playSound(soundLocation, this.sound, 1.0f, 0.6f);
-		if( this.particle != null )
-			end.getWorld().spawnParticle(Particle.BLOCK, particleLocation, 20, 0.4, 0.2, 0.4, this.particle);
+		if( sound != null )
+			end.getWorld().playSound(soundLocation, sound, 1.0f, 0.6f);
+		if( particle != null )
+			end.getWorld().spawnParticle(particle, particleLocation, particleCount, 0.4, 0.2, 0.4, particleBlockData);
 	}
 
 	public boolean isDone() {
 		return done;
 	}
 
+	public CompositeDisplayMover moveToEnd() {
+		holder.getCompositeDisplay().moveTo(end);
+		return this;
+	}
+		
 	public CompositeDisplayMover setSound(Sound sound, Location soundLocation) {
 		this.sound = sound;
 		this.soundLocation = soundLocation.clone();
 		return this;
 	}
 
-	public CompositeDisplayMover setParticle(BlockData particle, Location particleLoc) {
+	public CompositeDisplayMover setParticle(@NotNull Particle particle, @Nullable BlockData particleData, @NotNull Location particleLoc) {
+		return setParticle(particle, particleData, particleLoc, 20);
+	}
+	public CompositeDisplayMover setParticle(@NotNull Particle particle, @Nullable BlockData particleData, @NotNull Location particleLoc, int count) {
 		this.particle = particle;
+		this.particleBlockData = particleData;
 		this.particleLocation = particleLoc.clone();
+		this.particleCount = count;
 		return this;
 	}
 
@@ -96,7 +109,8 @@ public class CompositeDisplayMover {
 	}
 	
 	private void move() {
-		double t = (double)(runTime)/(double)duration;
+		double t = UtilFuncs.clamp((double)(runTime)/(double)duration, 0.0, 1.0);
+
 		Location newLoc = UtilFuncs.lerp(start, end, t);
 
 		holder.getCompositeDisplay().moveTo(newLoc);

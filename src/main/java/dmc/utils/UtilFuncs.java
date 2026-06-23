@@ -25,6 +25,13 @@ public class UtilFuncs {
 	static public final Color MARKER_LEVEL_UNKNOWN = new Color(0xff, 0xff, 0x00);  // #ffff00
 
 
+	static public final int clamp(int v, int min, int max) {
+		return Math.max(min,Math.min(max, v));
+	}
+	static public final double clamp(double v, double min, double max) {
+		return Math.max(min,Math.min(max, v));
+	}
+
 	static public boolean isDMCComponent(Entity entity) {
 		return getDMCComponentType(entity) != null;
 	}

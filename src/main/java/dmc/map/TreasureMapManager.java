@@ -150,10 +150,8 @@ public class TreasureMapManager implements Listener {
 
 		if( treasureLevel != null ) {
 			level = treasureLevel;
-			LOG(0,"Received treasure level from barrel: %d", level);
 		} else {
 			level = RNG.nextInt(3)+1; //levels 1 - 3
-			LOG(0,"Map level randomly set to %d", level);
 		}
 		int x = location.getBlockX();
 		int y = location.getBlockY();
@@ -187,10 +185,8 @@ public class TreasureMapManager implements Listener {
 		if( item == null)
 			return;
 		
-		LOG(0,"Checking item to restore: %s", item.getType().toString());
 		TreasureMapData mapData = TreasureMapData.fromItem(item);
 		if( mapData == null ) {
-			LOG(0,"Was not a map");
 			return;
 		}
 
@@ -212,14 +208,12 @@ public class TreasureMapManager implements Listener {
 			view.removeRenderer(renderer);
 		}
 
-		LOG(0,"Repairing treasure map");
 		byte[] packedBits = mapData.getPackedBits();
 		PixelPacker packer = null;
 		if( packedBits != null ) {
 			packer = new PixelPacker(packedBits);
 		}
 		TreasureMapImage image = new TreasureMapImage(treasureLoc, packer);
-		LOG(0,"Image is %s", image.isReady()? "READY" : "WAITING");
 		view.addRenderer(new TreasureMapRenderer(plugin, mapData.getMapId(), item, image, treasureLoc, mapData.getTreasureLevel()));
 
 		mapData.setToItem(item, view);

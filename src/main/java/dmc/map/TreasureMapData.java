@@ -129,7 +129,6 @@ public class TreasureMapData {
 	
 	public static TreasureMapData fromItem(ItemStack item) {
 		if( item == null || item.getType() != Material.FILLED_MAP) {
-			LOG(0,"Item is %s",(item==null?"null":" not a filled map"));
 			return null;
 		}
 
@@ -142,7 +141,6 @@ public class TreasureMapData {
 
 		String itemType = pdc.get(Constants.ITEM_TYPE_KEY, PersistentDataType.STRING);
 		if(!Constants.DMC_MAP_ITEM_TYPE.equals(itemType)) {
-			LOG(0,"ItemType is not MAP_ITEM_TYPE, it is %s", itemType == null ? "empty" : itemType);
 			return null;
 		}
 

@@ -66,7 +66,7 @@ public class TreasureChest implements ICompositeDisplayHolder {
 
 		Material treasureType = UtilFuncs.getMaterialForTreasureLevel(treasureLevel);
 		
-		theChest = new CompositeDisplay(Constants.DMC_CD_TYPE_TREASURE_CHEST, location, true, 1.0f, 1.0f)
+		theChest = new CompositeDisplay(Constants.DMC_CD_TYPE_TREASURE_CHEST, location, true, 1.25f, 1.25f)
 			.addBlock(Material.COMPOSTER          , new Vector3f(0f,      0f,      0.1875f), new Vector3f(0,0,0), new Vector3f(1f,     0.5625f, 0.625f))
 			.addItem(Material.SKELETON_SKULL     , new Vector3f(0.1875f, 0.375f,  0.8125f), new Vector3f(0,180f,0), new Vector3f(0.25f,  0.25f,   0.25f),
 							 (d) -> { d.setBrightness(new Display.Brightness(9,0)); })
