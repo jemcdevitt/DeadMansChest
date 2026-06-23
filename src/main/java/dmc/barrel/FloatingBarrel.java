@@ -9,6 +9,7 @@ package dmc.barrel;
  */
 
 import dmc.CompositeDisplay;
+import dmc.Configuration;
 import dmc.Constants;
 import dmc.utils.UtilFuncs;
 import java.util.UUID;
@@ -30,7 +31,7 @@ public class FloatingBarrel {
 	long ttl;
 	int level;
 
-	public FloatingBarrel(Location loc) {
+	public FloatingBarrel(Location loc, Configuration config) {
 
 		this.uniqueId = UUID.randomUUID().toString();
 		
@@ -64,7 +65,10 @@ public class FloatingBarrel {
 			.addKey(Constants.DMC_TREASURE_COMPONENT, true)
 			.spawn();
 
-		this.ttl = (RNG.nextInt(8) + 4) * 60_000;   //4-12 minutes
+		int minTime = config.getBarrelsConfig().min_lifetime_minutes();
+		int maxTime = config.getBarrelsConfig().max_lifetime_minutes();
+		
+		this.ttl = (RNG.nextInt(maxTime - minTime) + minTime) * 60_000;   
 	}
 
 

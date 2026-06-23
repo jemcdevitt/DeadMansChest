@@ -11,28 +11,32 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 public class LootEntry {
-    private final Material material;
-    private final int min;
-    private final int max;
-    private final int weight;
+	private final Material material;
+	private final int min;
+	private final int max;
+	private final int weight;
 
-    public LootEntry(Material material, int min, int max, int weight) {
-        this.material = material;
-        this.min = Math.max(1, min);
-        this.max = Math.max(this.min, max);
-        this.weight = Math.max(1, weight);
-    }
+	public LootEntry(Material material, int min, int max, int weight) {
+		this.material = material;
+		this.min = Math.max(1, min);
+		this.max = Math.max(this.min, max);
+		this.weight = Math.max(1, weight);
+	}
 
-    public Material getMaterial() {
-        return material;
-    }
+	public Material getMaterial() {
+		return material;
+	}
 
-    public int getWeight() {
-        return weight;
-    }
+	public int getWeight() {
+		return weight;
+	}
 
-    public ItemStack createItem() {
-        int amount = ThreadLocalRandom.current().nextInt(min, max + 1);
-        return new ItemStack(material, amount);
-    }
+	public ItemStack createItem() {
+		int amount = ThreadLocalRandom.current().nextInt(min, max + 1);
+		return new ItemStack(material, amount);
+	}
+
+	public boolean isRepeatable() {
+		return true;
+	}
 }

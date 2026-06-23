@@ -8,6 +8,7 @@ package dmc.map;
  * Manages the creation, restoration and lifecycle of a treasure map
  */
 
+import dmc.Configuration;
 import dmc.Constants;
 import dmc.DeadMansChestPlugin;
 import dmc.treasure.TreasureMarker;
@@ -40,10 +41,12 @@ import static dmc.DeadMansChestPlugin.LOG;
 
 public class TreasureMapManager implements Listener {
 	final DeadMansChestPlugin plugin;
+	final Configuration cfg;
 	static Random RNG;
 
 	public TreasureMapManager(DeadMansChestPlugin plugin) {
 		this.plugin = plugin;
+		cfg = plugin.getConfiguration();
 		
 		RNG = new Random(System.currentTimeMillis()*System.currentTimeMillis());
 	}
@@ -60,7 +63,7 @@ public class TreasureMapManager implements Listener {
 
 		//let's try a simple circle around the barrel location
 		//at the given radius to see if a spot fits the bill
-		int startRadius = RNG.nextInt(900);
+		int startRadius = RNG.nextInt(cfg.getTreasureConfig().max_distance() - cfg.getTreasureConfig().min_distance()) + cfg.getTreasureConfig().min_distance();
 		int radius = startRadius;
 		boolean radiusWrapCheck = false;
 		do {

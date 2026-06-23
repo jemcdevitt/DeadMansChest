@@ -1,6 +1,17 @@
-# A journey of 1,000 lines starts with a single char
+# A pirate's dream
 
 debug: true
+
+barrels:
+  max-active: 30
+  min-lifetime-minutes: 4
+  max-lifetime-minutes: 12
+  seconds-between-spawn-checks: 30
+  min-distance-between-barrels: 128
+
+treasure:
+  min-distance: 300
+  max-distance: 1200
 
 loot:
   remove-defaults: false

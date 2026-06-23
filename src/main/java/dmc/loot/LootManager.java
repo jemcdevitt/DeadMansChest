@@ -101,7 +101,6 @@ public class LootManager implements Listener {
 
 
 	private void removeTreasureChest(CompositeDisplay display) {
-//		LOG(0,"LM_rtc: starting removal");
 		Location loc = display.getLocation();
 		World world = display.getWorld();
 		display.setActive(false);
@@ -111,7 +110,6 @@ public class LootManager implements Listener {
 			}, 2 * 20L);
 	}
 	private void destroyTreasureChest(CompositeDisplay display) {
-//		LOG(0,"LM_dtc: starting destruction");
 		Location loc = display.getLocation();
 		World world = display.getWorld();
 		world.strikeLightningEffect(loc.clone().add(0.5, 0, 0.5));
@@ -195,9 +193,14 @@ public class LootManager implements Listener {
 		
 		for (int i = 0; i < rolls; i++) {
 			LootEntry entry = weightedPick(table);
-			if (entry != null) {
-				result.add(entry.createItem());
+			if(entry == null)
+				continue;
+
+			result.add(entry.createItem());
+			if(!entry.isRepeatable()) {
+				table.remove(entry);
 			}
+
 		}
 
 		ItemStack book = maybeGenerateBook(treasureLevel);
@@ -271,9 +274,7 @@ public class LootManager implements Listener {
 			table.add(new LootEntry(Material.EXPERIENCE_BOTTLE, 1, 3, 6));
 			table.add(new LootEntry(Material.SPRUCE_SAPLING, 1, 2, 17));
 			table.add(new LootEntry(Material.DARK_OAK_SAPLING, 2, 5, 17));
-			table.add(new LootEntry(Material.PALE_OAK_SAPLING, 2, 5, 17));
-			table.add(new LootEntry(Material.MANGROVE_PROPAGULE, 1, 2, 17));
-			table.add(new LootEntry(Material.CAKE, 1, 1, 7));
+			table.add(new LootEntry(Material.CAKE, 1, 1, 3));
     } else if (level == 2) {
 			table.add(new LootEntry(Material.GOLD_INGOT, 2, 6, 20));
 			table.add(new LootEntry(Material.IRON_INGOT, 4, 10, 16));
@@ -281,6 +282,10 @@ public class LootManager implements Listener {
 			table.add(new LootEntry(Material.REDSTONE, 6, 16, 10));
 			table.add(new LootEntry(Material.EXPERIENCE_BOTTLE, 3, 7, 8));
 			table.add(new LootEntry(Material.NAME_TAG, 1, 1, 4));
+			table.add(new LootEntry(Material.SPRUCE_SAPLING, 1, 2, 17));
+			table.add(new LootEntry(Material.DARK_OAK_SAPLING, 2, 5, 17));
+			table.add(new LootEntry(Material.PALE_OAK_SAPLING, 2, 5, 17));
+			table.add(new LootEntry(Material.MANGROVE_PROPAGULE, 1, 2, 17));
     } else {
 			table.add(new LootEntry(Material.DIAMOND, 1, 3, 14));
 			table.add(new LootEntry(Material.EMERALD, 4, 10, 14));
@@ -288,6 +293,8 @@ public class LootManager implements Listener {
 			table.add(new LootEntry(Material.EXPERIENCE_BOTTLE, 6, 12, 10));
 			table.add(new LootEntry(Material.ENCHANTED_GOLDEN_APPLE, 1, 1, 1));
 			table.add(new LootEntry(Material.NETHERITE_SCRAP, 1, 1, 2));
+			table.add(new LootEntry(Material.CAKE, 1, 1, 3));
+			table.add(new LootEntry(Material.PUMPKIN_PIE, 1, 1, 3));
     }
 
     applyConfigOverrides(table, level);

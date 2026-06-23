@@ -58,7 +58,7 @@ public class BarrelManager implements Listener {
 			public void run() {
 				BarrelManager.this.doSpawnCheck();
 			}
-		}.runTaskTimer(plugin, 0, config.getBarrelSpawnCheckSeconds() * 20);
+		}.runTaskTimer(plugin, 0, config.getBarrelsConfig().seconds_between_spawn_checks() * 20);
 
 		new BukkitRunnable() {
 			@Override
@@ -89,7 +89,6 @@ public class BarrelManager implements Listener {
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEntityEvent event) {
 		if( !(event.getRightClicked() instanceof Interaction inter)) {
-			LOG(0,"Not an interaction");
 			return;
 		}
  		if(!Constants.DMC_BARREL_ITEM_TYPE.equals(inter.getPersistentDataContainer().get(Constants.ITEM_TYPE_KEY,PersistentDataType.STRING))) {
@@ -166,7 +165,7 @@ public class BarrelManager implements Listener {
 						if( isCoastalWater(world, blockX, blockZ) ) {
 							Location waterBlock = new Location(world, (double)blockX + 0.5, (double)(world.getSeaLevel()-1) + 0.70, (double)blockZ + 0.5);
 							if( isFarEnoughFromOthers(waterBlock)) {
-								FloatingBarrel barrel = new FloatingBarrel(waterBlock);
+								FloatingBarrel barrel = new FloatingBarrel(waterBlock, config);
 								barrels.put(barrel.getUniqueId(), barrel);
 								barrel.showInfo(null, false);
 								spawnedABarrel = true;
@@ -187,7 +186,7 @@ public class BarrelManager implements Listener {
 	//worlds allowed, TODO will be to make this on a
 	//per world basis.
 	public boolean hitMaxBarrels(World world) {
-		if (barrels.size() >= config.getMaxBarrelsSpawned())
+		if (barrels.size() >= config.getBarrelsConfig().max_active())
 			return true;
 		return false;
 	}
@@ -236,7 +235,7 @@ public class BarrelManager implements Listener {
 	}
 
 	protected boolean isFarEnoughFromOthers(Location loc) {
-		double minDistSq = config.getMinDistanceBetweenBarrels() * config.getMinDistanceBetweenBarrels();
+		double minDistSq = config.getBarrelsConfig().min_distance_between_barrels() * config.getBarrelsConfig().min_distance_between_barrels();
 		boolean isFarEnough = true;
 
 		for(FloatingBarrel barrel : barrels.values()) {

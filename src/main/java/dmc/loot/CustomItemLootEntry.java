@@ -55,4 +55,10 @@ public class CustomItemLootEntry extends LootEntry {
 		item.setItemMeta(meta);
 		return item;
 	}
+
+	@Override
+	public boolean isRepeatable() {
+		return false;
+	}
+	
 }

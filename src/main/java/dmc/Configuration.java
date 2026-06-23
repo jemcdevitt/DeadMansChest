@@ -14,15 +14,21 @@ import static dmc.DeadMansChestPlugin.LOG;
 
 public class Configuration {
 	static public final boolean DEBUG_ON_DEFAULT = false;
-	static public final int     BARREL_SPAWN_CHECK_SECONDS = 30;
-	static public final int     MAX_BARRELS_SPAWNED = 30;
-	static public final int     MIN_DISTANCE_BETWEEN_BARRELS = 128;
+	
+	static public final int     BARRELS_SECONDS_BETWEEN_SPAWN_CHECKS = 30;
+	static public final int     BARRELS_MAX_ACTIVE = 30;
+	static public final int     BARRELS_MIN_LIFETIME_MINUTES = 4;
+	static public final int     BARRELS_MAX_LIFETIME_MINUTES = 12;
+	static public final int     BARRELS_MIN_DISTANCE_BETWEEN_BARRELS = 128;
+
+	static public final int     TREASURE_MIN_DISTANCE = 300;
+	static public final int     TREASURE_MAX_DISTANCE = 1200;
 
 	final DeadMansChestPlugin plugin;
 	private boolean debugOn = DEBUG_ON_DEFAULT;
-	private int barrelSpawnCheckSeconds = BARREL_SPAWN_CHECK_SECONDS;
-	private int maxBarrelsSpawned = MAX_BARRELS_SPAWNED;
-	private int minDistanceBetweenBarrels = MIN_DISTANCE_BETWEEN_BARRELS;
+
+	private BarrelsConfig  barrelsConfig;
+	private TreasureConfig treasureConfig;
 
 	Configuration(DeadMansChestPlugin plugin) {
 		this.plugin = plugin;
@@ -32,25 +38,20 @@ public class Configuration {
 	public boolean isDebugOn() {
 		return this.debugOn;
 	}
-	
-	public int getBarrelSpawnCheckSeconds() {
-		return this.barrelSpawnCheckSeconds;
-	}
-	public int getMaxBarrelsSpawned() {
-		return this.maxBarrelsSpawned;
-	}
-	public int getMinDistanceBetweenBarrels() {
-		return this.minDistanceBetweenBarrels; 
-	}
-	
 
+	public BarrelsConfig getBarrelsConfig() {
+		return this.barrelsConfig;
+	}
+
+	public TreasureConfig getTreasureConfig() {
+		return this.treasureConfig;
+	}
 
 	
 	public void showInfo() {
-		LOG(0,"Debug is " + (debugOn?"ON":"OFF"));
-		LOG(0,"Barrel spawn check in seconds is " + barrelSpawnCheckSeconds);
-		LOG(0,"Max barrels allowed is " + maxBarrelsSpawned);
-		LOG(0,"Min distance between barrels in blocks is " + minDistanceBetweenBarrels);
+		LOG(10,"Debug is " + (debugOn?"ON":"OFF"));
+		barrelsConfig.showInfo();
+		treasureConfig.showInfo();
 	}
 
 	public void loadConfiguration() {
@@ -58,11 +59,9 @@ public class Configuration {
 		if( cfg == null ) {
 			LOG(1,"Configuration should not be null");
 		} else {
-
 			debugOn = cfg.getBoolean("debug", false);
-			barrelSpawnCheckSeconds = cfg.getInt("barrelSpawnCheckSeconds", BARREL_SPAWN_CHECK_SECONDS);
-			maxBarrelsSpawned = cfg.getInt("maxBarrelsSpawned", MAX_BARRELS_SPAWNED);
-			minDistanceBetweenBarrels=cfg.getInt("minDistanceBetweenBarrels", MIN_DISTANCE_BETWEEN_BARRELS);
+			barrelsConfig = BarrelsConfig.get(cfg);
+			treasureConfig = TreasureConfig.get(cfg);
 		}	
 	}
 
@@ -73,5 +72,34 @@ public class Configuration {
 	//future
 	public boolean isWorldAllowed(World world) {
 		return world.getEnvironment() == World.Environment.NORMAL;
+	}
+
+	static public record TreasureConfig(int min_distance, int max_distance) {
+		static TreasureConfig get(FileConfiguration cfg) {
+			int min_distance = cfg.getInt("treasure.min-distance", TREASURE_MIN_DISTANCE);
+			int max_distance = cfg.getInt("treasure.max-distance", TREASURE_MAX_DISTANCE);
+			return new TreasureConfig(min_distance, max_distance);
+		}
+
+		void showInfo() {
+			LOG(10,"Treasure: min_distance: %d, max_distance: %d", min_distance(), max_distance());
+		}
+	}
+	
+	static public record BarrelsConfig(int max_active, int min_lifetime_minutes, int max_lifetime_minutes, int seconds_between_spawn_checks, int min_distance_between_barrels) {
+		static BarrelsConfig get(FileConfiguration cfg) {
+			int max_active = cfg.getInt("barrels.max-active", BARRELS_MAX_ACTIVE);
+			int max_lifetime_minutes = cfg.getInt("barrels.max-lifetime-minutes", BARRELS_MAX_LIFETIME_MINUTES);
+			int min_lifetime_minutes = cfg.getInt("barrels.min-lifetime-minutes", BARRELS_MIN_LIFETIME_MINUTES);
+			int seconds_between_spawn_checks = cfg.getInt("barrels.seconds-between-spawn-checks", BARRELS_SECONDS_BETWEEN_SPAWN_CHECKS);
+			int min_distance_between_barrels = cfg.getInt("barrels.min-distance-between-barrels", BARRELS_MIN_DISTANCE_BETWEEN_BARRELS);
+			return new BarrelsConfig(max_active, min_lifetime_minutes, max_lifetime_minutes, seconds_between_spawn_checks, min_distance_between_barrels);
+		}
+
+		void showInfo() {
+			LOG(10,"Barrels:%n  max_active: %d%n  min_lifetime_minutes: %d%n  max_lifetime_minutes: %d%n  seconds_between_spawn_checks: %d%n  min_distance_between_barrels: %d",
+					max_active(), min_lifetime_minutes(), max_lifetime_minutes(), seconds_between_spawn_checks(), min_distance_between_barrels());
+		}
+
 	}
 }
