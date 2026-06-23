@@ -50,8 +50,7 @@ The goal is not to create a complicated quest system. The goal is to add mystery
 
 ## Features
 
-* Floating treasure barrels that spawn in the world
-* Custom barrel models
+* Floating treasure barrels that spawn in the world using custom models
 * Three treasure tiers: **Emerald**, **Ruby**, and **Diamond**
 * Custom soggy parchment-style treasure maps
 * Animated wet-map reveal effect
@@ -225,7 +224,6 @@ Configuration areas include:
 * Barrel lifetime
 * Treasure generation distance
 * Treasure tier weighting
-* Guardian difficulty
 * Loot tables
 * Enchanted book chances
 * Custom loot additions
