@@ -210,6 +210,7 @@ public class LootManager implements Listener {
 	}
 
 	private int getRollCount(int treasureLevel) {
+		
 		int fallback = switch(treasureLevel) {
 			case 1 -> 4;
 			case 2 -> 6;

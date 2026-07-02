@@ -39,6 +39,7 @@ public class TreasureMapRenderer extends MapRenderer {
 	static public final Color MARKER_BORDER = new Color(0x3c, 0x2e, 0x22);
 	
 	private final Location treasureLoc;
+	private final World mapWorld;
 	private final DeadMansChestPlugin plugin;
 	private final String mapId;
 	private TreasureMapImage image ;
@@ -55,22 +56,39 @@ public class TreasureMapRenderer extends MapRenderer {
 		this.mapId = mapId;
 		this.plugin = plugin;
 		this.image = image;
-		this.treasureLoc = treasureLoc.clone();
+		this.treasureLoc = treasureLoc == null ? null : treasureLoc.clone();
+		this.mapWorld = treasureLoc == null ? null : treasureLoc.getWorld();
 		this.map = map;
 		this.treasureLevel = treasureLevel;
 
-		generateWetBlobs(treasureLoc.getBlockX() * 734287L ^ treasureLoc.getBlockZ() * 912271L);
+		long seed = treasureLoc == null ? mapId.hashCode() : treasureLoc.getBlockX() * 734287L ^ treasureLoc.getBlockZ() * 912271L;
+		generateWetBlobs(seed);
 	}
+
+	public TreasureMapRenderer(DeadMansChestPlugin plugin, String mapId, ItemStack map, World world, int treasureLevel) {
+		super(false);
+		this.mapId = mapId;
+		this.plugin = plugin;
+		this.image = null;
+		this.treasureLoc = null;
+		this.mapWorld = world;
+		this.map = map;
+		this.treasureLevel = treasureLevel;
+
+		generateWetBlobs(mapId.hashCode());
+	}
+		
 
 	@Override
 	public void render(MapView view, MapCanvas canvas, Player player) {
-		if( player == null || !player.getWorld().equals(treasureLoc.getWorld())) {
+		if(player == null || mapWorld == null || !player.getWorld().equals(mapWorld)) {
 			return;
 		}
 
-
 		if(!renderedBaseMap) {
-			if(image.isReady()) {
+			if(image == null) {
+				paintWaterloggedParchment(canvas);
+			} else if(image.isReady()) {
 				paintPreparedMap(canvas);
 				renderedBaseMap = true;
 
@@ -97,6 +115,14 @@ public class TreasureMapRenderer extends MapRenderer {
 		canvas.setCursors(cursors);
 	}
 
+	private void paintWaterloggedParchment(MapCanvas canvas) {
+		for(int py = 0; py < 128; py++) {
+			for(int px = 0; px < 128; px++) {
+				canvas.setPixelColor(px, py, getWetParchmentColor(px, py));
+			}
+		}
+	}
+	
 	private void paintPreparedMap(MapCanvas canvas) {
 		for(int px = 0; px < image.getWidth(); px++ ) {
 			for(int py = 0; py < image.getHeight(); py++) {

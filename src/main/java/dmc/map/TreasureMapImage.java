@@ -102,6 +102,13 @@ public class TreasureMapImage {
 		int worldX = location.getBlockX() + dx;
 		int worldZ = location.getBlockZ() + dz;
 
+		// Do not generate terrain just to draw a treasure map.  In very new
+		// worlds, unknown/unavailable chunks are rendered as water until the
+		// player has naturally xplored more of the area
+		if( world.getChunkAt(worldX >> 4, worldZ >> 4, false) == null) {
+			return Constants.PARCHMENT_WATER_COLOR;
+		}
+
 		int highestY = world.getHighestBlockYAt(worldX, worldZ);
 		Material top = world.getBlockAt(worldX, highestY-1, worldZ).getType();
 		if( isWater(top) )

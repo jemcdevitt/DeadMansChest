@@ -32,6 +32,7 @@ public class TreasureMapData {
 	int treasureZ;
 	int treasureLevel;
 	boolean treasureMarkerCreated;
+	boolean pending;
 	String treasureMarkerUniqueId;
 	byte[] packedBits;
 
@@ -44,6 +45,7 @@ public class TreasureMapData {
 		this.treasureZ = treasureZ;
 		this.treasureLevel = treasureLevel;
 		this.treasureMarkerCreated = treasureMarkerCreated;
+		this.pending = false;
 	}
 
 
@@ -61,6 +63,23 @@ public class TreasureMapData {
 	}
 	public int getTreasureZ() {
 		return this.treasureZ;
+	}
+
+	public boolean isPending() {
+		return this.pending;
+	}
+
+	public void setPending(boolean pending) {
+		this.pending = pending;
+	}
+
+	public void setTreasureLocation(Location location) {
+		if( location == null )
+			return;
+		this.worldId = location.getWorld().getUID();
+		this.treasureX = location.getBlockX();
+		this.treasureY = location.getBlockY();
+		this.treasureZ = location.getBlockZ();
 	}
 	
 	public byte[] getPackedBits() {
@@ -116,6 +135,8 @@ public class TreasureMapData {
 		pdc.set(Constants.DMC_TREASURE_Z_VAL, PersistentDataType.INTEGER, treasureZ);
 		pdc.set(Constants.DMC_TREASURE_LEVEL, PersistentDataType.INTEGER, treasureLevel);
 		pdc.set(Constants.DMC_TREASURE_MARKER_CREATED, PersistentDataType.BOOLEAN, treasureMarkerCreated);
+		pdc.set(Constants.DMC_TREASURE_MAP_PENDING, PersistentDataType.BOOLEAN, pending);
+		
 		if( treasureMarkerUniqueId != null )
 			pdc.set(Constants.DMC_TREASURE_MARKER_ID_KEY, PersistentDataType.STRING, treasureMarkerUniqueId);
 		
@@ -151,6 +172,7 @@ public class TreasureMapData {
 		Integer z = pdc.get(Constants.DMC_TREASURE_Z_VAL, PersistentDataType.INTEGER);
 		Integer level = pdc.get(Constants.DMC_TREASURE_LEVEL, PersistentDataType.INTEGER);
 		Boolean markerCreated = pdc.get(Constants.DMC_TREASURE_MARKER_CREATED, PersistentDataType.BOOLEAN);
+		Boolean pending = pdc.get(Constants.DMC_TREASURE_MAP_PENDING, PersistentDataType.BOOLEAN);
 		String treasureMarkerId = pdc.get(Constants.DMC_TREASURE_MARKER_ID_KEY, PersistentDataType.STRING);
 		byte[] packedBits = pdc.get(Constants.DMC_TREASURE_MAP_PIXELS, PersistentDataType.BYTE_ARRAY);
 
@@ -181,6 +203,7 @@ public class TreasureMapData {
 		}
 
 		TreasureMapData data = new TreasureMapData(mapId, worldId, x, y, z, level, markerCreated);
+		data.setPending(pending != null && pending);
 		if( packedBits != null )
 			data.setPackedBits(packedBits);
 		if( treasureMarkerId != null )

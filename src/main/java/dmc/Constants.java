@@ -54,10 +54,11 @@ public class Constants {
 
 	static public final NamespacedKey DMC_TREASURE_MAP_PIXELS = new NamespacedKey(NAME_SPACE, "dmc_treasure_map_pixels");
 	static public final NamespacedKey DMC_TREASURE_MAP_PIXEL_FORMAT = new NamespacedKey(NAME_SPACE, "dmc_treasure_map_pixel_format");
+	static public final NamespacedKey DMC_TREASURE_MAP_PENDING = new NamespacedKey(NAME_SPACE, "dmc_treasure_map_pending");
 
 
 	//color constants
-	static public final Color PARCHMENT_WATER_COLOR = new Color(170, 139, 82);
+	static public final Color PARCHMENT_WATER_COLOR = new Color(156, 166, 84); //(170, 139, 82);
 	static public final int PARCHMENT_WATER_MASK = 0b000000001;
 	
 	static public final Color PARCHMENT_LAND_LOW_COLOR = new Color(218, 190, 120);
