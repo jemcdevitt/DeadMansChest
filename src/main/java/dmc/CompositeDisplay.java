@@ -148,6 +148,19 @@ public class CompositeDisplay implements ICompositeDisplayHolder {
 		return this;
 	}
 
+	public String getStringKey(NamespacedKey key) {
+		return interaction.getPersistentDataContainer().get(key, PersistentDataType.STRING);
+	}
+	public Boolean getBooleanKey(NamespacedKey key) {
+		return interaction.getPersistentDataContainer().get(key, PersistentDataType.BOOLEAN);
+	}
+	public Integer getIntegerKey(NamespacedKey key) {
+		return interaction.getPersistentDataContainer().get(key, PersistentDataType.INTEGER);
+	}
+	public Float getFloatKey(NamespacedKey key) {
+		return interaction.getPersistentDataContainer().get(key, PersistentDataType.FLOAT);
+	}
+	
 	public CompositeDisplay addKey(NamespacedKey key, String val) {
 		keyData.add(new KeyData(key, val));
 		return this;

@@ -58,11 +58,11 @@ public class TreasureMapManager implements Listener {
 		RNG = new Random(System.currentTimeMillis()*System.currentTimeMillis());
 	}
 
-	public void generateTreasureMap(Player player, Location barrelLocation, Integer treasureLevel) {
+	public void generateTreasureMap(Player player, Location barrelLocation, Integer treasureLevel, String pirateName, String pirateAdjective) {
 		if( player == null || barrelLocation == null || barrelLocation.getWorld() == null) {
 			return;
 		}
-		ItemStack map = createPendingTreasureMap(barrelLocation, treasureLevel);
+		ItemStack map = createPendingTreasureMap(barrelLocation, treasureLevel, pirateName, pirateAdjective);
 		if( map == null ) {
 			LOG(1, player, "There was an error creating the treasure map");
 			return;
@@ -102,7 +102,7 @@ public class TreasureMapManager implements Listener {
 	}
 	
 
-	private ItemStack createPendingTreasureMap(Location origin, Integer treasureLevel) {
+	private ItemStack createPendingTreasureMap(Location origin, Integer treasureLevel, String pirateName, String pirateAdjective) {
 		String uniqueId = UUID.randomUUID().toString();
 
 		World world = origin.getWorld();
@@ -112,7 +112,7 @@ public class TreasureMapManager implements Listener {
 		
 		MapView view = createPendingMapView(world, uniqueId, map, origin, level);
 
-		TreasureMapData mapData = new TreasureMapData(uniqueId, world.getUID(), origin.getBlockX(), origin.getBlockY(), origin.getBlockZ(), level, false);
+		TreasureMapData mapData = new TreasureMapData(uniqueId, world.getUID(), origin.getBlockX(), origin.getBlockY(), origin.getBlockZ(), level, false, pirateName, pirateAdjective);
 		mapData.setPending(true);
 		mapData.setToItem(map, view);
 		return map;

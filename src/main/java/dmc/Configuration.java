@@ -29,6 +29,7 @@ public class Configuration {
 
 	private BarrelsConfig  barrelsConfig;
 	private TreasureConfig treasureConfig;
+	private MessagesConfig messagesConfig;
 
 	Configuration(DeadMansChestPlugin plugin) {
 		this.plugin = plugin;
@@ -46,12 +47,16 @@ public class Configuration {
 	public TreasureConfig getTreasureConfig() {
 		return this.treasureConfig;
 	}
+	public MessagesConfig getMessagesConfig() {
+		return this.messagesConfig;
+	}
 
 	
 	public void showInfo() {
 		LOG(10,"Debug is " + (debugOn?"ON":"OFF"));
 		barrelsConfig.showInfo();
 		treasureConfig.showInfo();
+		messagesConfig.showInfo();
 	}
 
 	public void loadConfiguration() {
@@ -62,6 +67,7 @@ public class Configuration {
 			debugOn = cfg.getBoolean("debug", false);
 			barrelsConfig = BarrelsConfig.get(cfg);
 			treasureConfig = TreasureConfig.get(cfg);
+			messagesConfig = MessagesConfig.get(cfg);
 		}	
 	}
 
@@ -101,5 +107,31 @@ public class Configuration {
 					max_active(), min_lifetime_minutes(), max_lifetime_minutes(), seconds_between_spawn_checks(), min_distance_between_barrels());
 		}
 
+	}
+
+	static public record MessagesConfig(TreasureRecoveredConfig treasure_recovered) {	
+		static MessagesConfig get(FileConfiguration cfg) {
+			TreasureRecoveredConfig trc = TreasureRecoveredConfig.get(cfg);
+			return new MessagesConfig(trc);
+		}
+
+		void showInfo() {
+			LOG(10,"messages:");
+			treasure_recovered().showInfo();
+		}
+	}
+
+	static public record TreasureRecoveredConfig(boolean enabled, boolean broadcast, String text) {
+		static TreasureRecoveredConfig get(FileConfiguration cfg) {
+			String text = cfg.getString("messages.treasure-recovered.text", "%player% has recovered the treasure of %adjective% pirate %pirate_name% and broken the curse.");
+			boolean enabled = cfg.getBoolean("messages.treasure-recovered.enabled",true);
+			boolean broadcast = cfg.getBoolean("messages.treasure-recovered.broadcast", false);
+			return new TreasureRecoveredConfig(enabled, broadcast, text);
+		}
+
+		void showInfo() {
+			LOG(10,"treasure-recovered: enabled: %s, broadcast: %s, text: \"%s\"",
+					enabled(), broadcast(), text());
+		}
 	}
 }

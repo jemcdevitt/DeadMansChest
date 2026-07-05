@@ -21,14 +21,18 @@ import org.joml.Vector3f;
 public class TreasureMarker implements ICompositeDisplayHolder {
 	final Location location;
 	final String uniqueId;
+	final String pirateName;
+	final String pirateAdjective;
 	final int level;
 	CompositeDisplay marker;
 	
 
-	public TreasureMarker(Location loc, int treasureLevel) {
+	public TreasureMarker(Location loc, int treasureLevel, String pirateName, String pirateAdjective) {
 		this.location = loc.clone();
 		this.uniqueId = UUID.randomUUID().toString();
 		this.level = treasureLevel;
+		this.pirateName = pirateName;
+		this.pirateAdjective = pirateAdjective;
 		
 		Material levelGem = UtilFuncs.getMaterialForTreasureLevel(level);;
 
@@ -98,6 +102,8 @@ public class TreasureMarker implements ICompositeDisplayHolder {
 			.addKey(Constants.DMC_TREASURE_MARKER_ID_KEY, this.uniqueId)
 			.addKey(Constants.DMC_TREASURE_LEVEL, level)
 			.addKey(Constants.DMC_TREASURE_COMPONENT, true)
+			.addKey(Constants.DMC_PIRATE_NAME, pirateName)
+			.addKey(Constants.DMC_PIRATE_ADJECTIVE, pirateAdjective)
 			.spawn();
 	}
 

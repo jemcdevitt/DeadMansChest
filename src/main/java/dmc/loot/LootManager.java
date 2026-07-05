@@ -8,6 +8,7 @@ package dmc.loot;
 
 import dmc.CompositeDisplay;
 import dmc.CompositeDisplayMover;
+import dmc.Configuration;
 import dmc.Constants;
 import dmc.DeadMansChestPlugin;
 import io.papermc.paper.registry.RegistryAccess;
@@ -26,8 +27,10 @@ import org.bukkit.Particle;
 import org.bukkit.Registry;
 import org.bukkit.Sound;
 import org.bukkit.World;
+import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.BlockDisplay;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Interaction;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -46,9 +49,11 @@ public class LootManager implements Listener {
 
 	private final DeadMansChestPlugin plugin;
 	private final Map<String,Inventory> activeLoot = new HashMap<>();
+	private final Configuration config;
 
 	public LootManager(DeadMansChestPlugin plugin) {
 		this.plugin = plugin;
+		this.config = plugin.getConfiguration();
 	}
 
 	public void openTreasureChest(Player player, Interaction interaction, CompositeDisplay chestDisplay, int treasureLevel) {
@@ -95,26 +100,29 @@ public class LootManager implements Listener {
 		
 		CompositeDisplay display = holder.getChestDisplay();
 		if (display != null) {
-			removeTreasureChest(display);
+			removeTreasureChest(display, event.getPlayer());
 		}
 	}
 
 
-	private void removeTreasureChest(CompositeDisplay display) {
+	private void removeTreasureChest(CompositeDisplay display, HumanEntity entity ) {
 		Location loc = display.getLocation();
 		World world = display.getWorld();
 		display.setActive(false);
 		world.playSound(loc, Sound.BLOCK_CHEST_CLOSE, 1.0f, 0.85f);
 		Bukkit.getScheduler().runTaskLater(plugin, () -> {
-				destroyTreasureChest(display);
+				destroyTreasureChest(display, entity);
 			}, 2 * 20L);
 	}
-	private void destroyTreasureChest(CompositeDisplay display) {
+	private void destroyTreasureChest(CompositeDisplay display, HumanEntity entity) {
 		Location loc = display.getLocation();
 		World world = display.getWorld();
 		world.strikeLightningEffect(loc.clone().add(0.5, 0, 0.5));
 		world.playSound(loc, Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 1.0f, 0.85f);
 		world.playSound(loc, Sound.BLOCK_SOUL_SAND_BREAK, 0.75f, 0.60f);
+
+		String pirateName = display.getStringKey(Constants.DMC_PIRATE_NAME);
+		String pirateAdjective = display.getStringKey(Constants.DMC_PIRATE_ADJECTIVE);
 
 		CompositeDisplayMover chestMover = new CompositeDisplayMover("chest", display, loc.clone(), loc.clone().add(0,-1,0), 8_000, false)
 			.setSound(Sound.BLOCK_SOUL_SAND_BREAK, loc)
@@ -156,6 +164,28 @@ public class LootManager implements Listener {
 				chestMover.moveToEnd();
 				world.playSound(loc, Sound.BLOCK_AMETHYST_BLOCK_BREAK, 1.0f, 0.85f);
 				display.remove();
+				if( config.getMessagesConfig().treasure_recovered().enabled()) {
+					String msg = null;
+					String messageText = config.getMessagesConfig().treasure_recovered().text();
+					msg = messageText;
+					if( pirateAdjective != null ) {
+						msg = msg.replace("%adjective%", "the " + pirateAdjective);
+					} else {
+						msg = msg.replace("%adjective% ","");
+					}
+
+					if( pirateName != null) {
+						msg = msg.replace("%pirate_name%",pirateName);
+					} else {
+						msg = msg.replace("%pirate_name%","");
+					}
+					msg = msg.replace("%player%",entity.getName());
+					if(config.getMessagesConfig().treasure_recovered().broadcast()) {
+						Bukkit.broadcast(Component.text(msg));
+					} else {
+						entity.sendMessage(msg);
+					}
+				}
 				cancel();
 			}
 				

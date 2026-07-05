@@ -8,6 +8,7 @@ package dmc;
  */
 
 import java.awt.Color;
+import java.util.Random;
 import org.bukkit.NamespacedKey;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataHolder;
@@ -56,6 +57,9 @@ public class Constants {
 	static public final NamespacedKey DMC_TREASURE_MAP_PIXEL_FORMAT = new NamespacedKey(NAME_SPACE, "dmc_treasure_map_pixel_format");
 	static public final NamespacedKey DMC_TREASURE_MAP_PENDING = new NamespacedKey(NAME_SPACE, "dmc_treasure_map_pending");
 
+	static public final NamespacedKey DMC_PIRATE_NAME = new NamespacedKey(NAME_SPACE, "dmc_pirate_name");
+	static public final NamespacedKey DMC_PIRATE_ADJECTIVE = new NamespacedKey(NAME_SPACE, "dmc_pirate_adjective");
+
 
 	//color constants
 	static public final Color PARCHMENT_WATER_COLOR = new Color(156, 166, 84); //(170, 139, 82);
@@ -67,5 +71,62 @@ public class Constants {
 	static public final Color PARCHMENT_LAND_HIGH_COLOR = new Color(126, 91, 47);
 	static public final int PARCHMENT_LAND_HIGH_MASK = 0b00000011;
 
+
+
+	//priate names/adjectives.  hard coded for initial release TODO will be to add a config for this
+
+	private static final String[] ADJECTIVES = {
+    "blackhearted",
+    "cursed",
+    "drowned",
+    "grim",
+    "salt-scarred",
+    "red-handed",
+    "one-eyed",
+    "hollow-eyed",
+    "stormbound",
+    "ruthless",
+    "barnacle-covered",
+    "moon-cursed"
+	};
 	
+	private static final String[] FIRST_NAMES = {
+    "Elias",
+    "Mara",
+    "Silas",
+    "Anne",
+    "Gideon",
+    "Rowan",
+    "Caleb",
+    "Isolde",
+    "Jonas",
+    "Cassia",
+    "Morgan",
+    "Tobias"
+	};
+	
+	private static final String[] SURNAMES = {
+    "Blackwake",
+    "Graves",
+    "Stormreef",
+    "Crowe",
+    "Saltmarsh",
+    "Boneharbor",
+    "Darktide",
+    "Redwater",
+    "Ironhook",
+    "Gallows",
+    "Seabane",
+    "Duskmoor"
+	};
+
+	public static String generatePirateName(Random rng) {
+		String first = FIRST_NAMES[rng.nextInt(FIRST_NAMES.length)];
+		String last = SURNAMES[rng.nextInt(SURNAMES.length)];
+			return first + " " + last;
+	}
+
+	public static String generatePirateAdjective(Random rng) {
+		return ADJECTIVES[rng.nextInt(ADJECTIVES.length)];
+	}
 }

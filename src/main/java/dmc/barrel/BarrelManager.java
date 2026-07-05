@@ -116,8 +116,11 @@ public class BarrelManager implements Listener {
 			LOG(1,"Barrel didn't have a defined treasure level, defaulting to 1");
 			treasureLevel = 1;
 		}
+
+		String pirateName = Constants.generatePirateName(RNG);
+		String pirateAdjective = Constants.generatePirateAdjective(RNG);
 		
-		plugin.getMapManager().generateTreasureMap(player, barrel.getLocation(), treasureLevel);
+		plugin.getMapManager().generateTreasureMap(player, barrel.getLocation(), treasureLevel, pirateName, pirateAdjective);
 
 	}
 	

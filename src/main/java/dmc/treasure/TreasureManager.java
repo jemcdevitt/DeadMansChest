@@ -71,7 +71,7 @@ public class TreasureManager implements Listener {
 			return;
 		}
 		
-		TreasureMarker marker = new TreasureMarker(location, mapData.getTreasureLevel());
+		TreasureMarker marker = new TreasureMarker(location, mapData.getTreasureLevel(), mapData.getPirateName(), mapData.getPirateAdjective());
 
 		mapData.setTreasureMarkerCreated(true);
 		mapData.setTreasureMarkerUniqueId(marker.getUniqueId());
@@ -117,6 +117,7 @@ public class TreasureManager implements Listener {
 		PersistentDataContainer pdc = inter.getPersistentDataContainer();
 		
 		String id = pdc.get(Constants.DMC_TREASURE_MARKER_ID_KEY, PersistentDataType.STRING);
+		String pirateName = pdc.get(Constants.DMC_PIRATE_NAME, PersistentDataType.STRING);
 
 		
 		Integer treasureLevel = pdc.get(Constants.DMC_TREASURE_LEVEL, PersistentDataType.INTEGER);
@@ -124,7 +125,7 @@ public class TreasureManager implements Listener {
 			return;
 		}
 
-		Set<String> guardians = spawnGuardians(treasureLevel, inter, player);
+		Set<String> guardians = spawnGuardians(treasureLevel, pirateName, inter, player);
 
 		if( guardians == null || guardians.size() == 0 ) {
 			allGuardiansDefeated(inter);
@@ -189,8 +190,11 @@ public class TreasureManager implements Listener {
 		CompositeDisplayMover treasureMarkerMover = new CompositeDisplayMover("marker", treasureMarker.setActive(false), markerLocation.clone(), markerLocation.clone().add(0, -2, 0), 8_000)
 			.setSound(Sound.BLOCK_SOUL_SAND_BREAK, markerLocation)
 			.setParticle(Particle.BLOCK, Material.SOUL_SAND.createBlockData(), markerLocation);
+
+		String pirateName = treasureMarker.getStringKey(Constants.DMC_PIRATE_NAME);
+		String pirateAdjective = treasureMarker.getStringKey(Constants.DMC_PIRATE_ADJECTIVE);
 		
-		CompositeDisplayMover treasureChestMover = new CompositeDisplayMover("chest", new TreasureChest(markerLocation.clone().add(0,-1.5,0), treasureLevel),
+		CompositeDisplayMover treasureChestMover = new CompositeDisplayMover("chest", new TreasureChest(markerLocation.clone().add(0,-1.5,0), treasureLevel, pirateName, pirateAdjective),
 																																						markerLocation.clone().add(0,-1.5,0), markerLocation.clone(),	6_000, true)
 			.setSound(Sound.BLOCK_SOUL_SAND_BREAK, markerLocation)
 			.setParticle(Particle.BLOCK, Material.SOUL_SAND.createBlockData(), markerLocation)
@@ -250,7 +254,7 @@ public class TreasureManager implements Listener {
 		return Constants.DMC_TREASURE_CHEST_ITEM_TYPE.equals(inter.getPersistentDataContainer().get(Constants.ITEM_TYPE_KEY,PersistentDataType.STRING));
 	}
 
-	private Set<String> spawnGuardians(int treasureLevel, Interaction marker, Player player) {
+	private Set<String> spawnGuardians(int treasureLevel, String pirateName, Interaction marker, Player player) {
 
 		Set<String> guardianIds = new HashSet<>();
 		CompositeDisplay treasureMarker =  CompositeDisplay.reconstituteFromInteraction(Constants.DMC_CD_TYPE_TREASURE_MARKER, marker);
@@ -288,7 +292,7 @@ public class TreasureManager implements Listener {
 			}
 			int which = i;
 			Skeleton skeleton = world.spawn(spawnLoc, Skeleton.class, skel -> {
-					configureGuardian(skel, treasureLevel, which, marker);
+					configureGuardian(skel, treasureLevel, which, marker, pirateName);
 					skel.setAI(false);
 					skel.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 40, 10, false, false));
 				});
@@ -389,16 +393,20 @@ public class TreasureManager implements Listener {
     return true;
 	}
 
-	private void configureGuardian(Skeleton skeleton, int treasureLevel, int index, Interaction markerInteraction) {
+	private void configureGuardian(Skeleton skeleton, int treasureLevel, int index, Interaction markerInteraction, String pirateName) {
     skeleton.setPersistent(true);
     skeleton.setRemoveWhenFarAway(false);
-    skeleton.customName(Component.text(guardianName(treasureLevel, index)));
+		if( index == 0 )
+			skeleton.customName(Component.text(pirateName));
+		else 
+			skeleton.customName(Component.text(guardianName(treasureLevel, index)));
     skeleton.setCustomNameVisible(false);
 		
     PersistentDataContainer pdc = skeleton.getPersistentDataContainer();
 		
     pdc.set(Constants.ITEM_TYPE_KEY, PersistentDataType.STRING, Constants.DMC_GUARDIAN_ITEM_TYPE);
     pdc.set(Constants.DMC_TREASURE_LEVEL, PersistentDataType.INTEGER, treasureLevel);
+		pdc.set(Constants.DMC_PIRATE_NAME, PersistentDataType.STRING, pirateName);
 		
     String markerId = markerInteraction.getPersistentDataContainer()
 			.get(Constants.DMC_CD_ID_KEY, PersistentDataType.STRING);

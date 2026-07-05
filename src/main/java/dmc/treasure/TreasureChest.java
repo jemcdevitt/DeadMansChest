@@ -27,18 +27,24 @@ public class TreasureChest implements ICompositeDisplayHolder {
 	int treasureLevel;
 	CompositeDisplay theChest;
 	String uniqueId;
+	String pirateName;
+	String pirateAdjective;
 
-	public TreasureChest(Location loc, int treasureLevel) {
+	public TreasureChest(Location loc, int treasureLevel, String pirateName, String pirateAdjective) {
 		this.location = loc.clone();
 		this.treasureLevel = treasureLevel;
+		this.pirateName = pirateName;
+		this.pirateAdjective = pirateAdjective;
 		init();
 	}
 	
-	public TreasureChest(ItemStack map, Location loc, int treasureLevel) {
+	public TreasureChest(ItemStack map, Location loc, int treasureLevel, String pirateName, String pirateAdjective) {
 		LOG(0, "New treasure chest at (%d,%d,%d)", loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
 		this.location = loc.clone();
 		this.treasureMap = map;
 		this.treasureLevel = treasureLevel;
+		this.pirateName = pirateName;
+		this.pirateAdjective = pirateAdjective;
 		init();
 	}
 	
@@ -99,6 +105,8 @@ public class TreasureChest implements ICompositeDisplayHolder {
 			.addKey(Constants.DMC_TREASURE_COMPONENT, true)
 			.addKey(Constants.DMC_TREASURE_LEVEL, treasureLevel)
 			.addKey(Constants.ITEM_TYPE_KEY, Constants.DMC_TREASURE_CHEST_ITEM_TYPE)
+			.addKey(Constants.DMC_PIRATE_NAME, pirateName)
+			.addKey(Constants.DMC_PIRATE_ADJECTIVE, pirateAdjective)
 			.addKey(Constants.DMC_TREASURE_CHEST_ID_KEY, this.uniqueId);
 		
 		

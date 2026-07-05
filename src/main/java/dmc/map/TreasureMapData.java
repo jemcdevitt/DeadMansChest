@@ -34,10 +34,12 @@ public class TreasureMapData {
 	boolean treasureMarkerCreated;
 	boolean pending;
 	String treasureMarkerUniqueId;
+	String pirateName;
+	String pirateAdjective;
 	byte[] packedBits;
 
 
-	public TreasureMapData(String mapId, UUID worldId, int treasureX, int treasureY, int treasureZ, int treasureLevel, boolean treasureMarkerCreated) {
+	public TreasureMapData(String mapId, UUID worldId, int treasureX, int treasureY, int treasureZ, int treasureLevel, boolean treasureMarkerCreated, String pirateName, String pirateAdjective) {
 		this.mapId = mapId;
 		this.worldId = worldId;
 		this.treasureX = treasureX;
@@ -45,9 +47,17 @@ public class TreasureMapData {
 		this.treasureZ = treasureZ;
 		this.treasureLevel = treasureLevel;
 		this.treasureMarkerCreated = treasureMarkerCreated;
+		this.pirateName = pirateName;
+		this.pirateAdjective = pirateAdjective;
 		this.pending = false;
 	}
 
+	public String getPirateName() {
+		return this.pirateName;
+	}
+	public String getPirateAdjective() {
+		return this.pirateAdjective;
+	}
 
 	public String getMapId() {
 		return this.mapId;
@@ -124,7 +134,7 @@ public class TreasureMapData {
 		if( !(item.getItemMeta() instanceof MapMeta meta)) {
 			return;
 		}
-		meta.displayName(Component.text("A soggy pirate's treasure map"));
+		meta.displayName(Component.text(String.format("A soggy map to the %s pirate %s's treasure", pirateAdjective, pirateName)));
 
 		PersistentDataContainer pdc = meta.getPersistentDataContainer();
 		pdc.set(Constants.ITEM_TYPE_KEY, PersistentDataType.STRING, Constants.DMC_MAP_ITEM_TYPE);
@@ -136,6 +146,8 @@ public class TreasureMapData {
 		pdc.set(Constants.DMC_TREASURE_LEVEL, PersistentDataType.INTEGER, treasureLevel);
 		pdc.set(Constants.DMC_TREASURE_MARKER_CREATED, PersistentDataType.BOOLEAN, treasureMarkerCreated);
 		pdc.set(Constants.DMC_TREASURE_MAP_PENDING, PersistentDataType.BOOLEAN, pending);
+		pdc.set(Constants.DMC_PIRATE_NAME, PersistentDataType.STRING, pirateName);
+		pdc.set(Constants.DMC_PIRATE_ADJECTIVE, PersistentDataType.STRING, pirateAdjective);
 		
 		if( treasureMarkerUniqueId != null )
 			pdc.set(Constants.DMC_TREASURE_MARKER_ID_KEY, PersistentDataType.STRING, treasureMarkerUniqueId);
@@ -174,6 +186,8 @@ public class TreasureMapData {
 		Boolean markerCreated = pdc.get(Constants.DMC_TREASURE_MARKER_CREATED, PersistentDataType.BOOLEAN);
 		Boolean pending = pdc.get(Constants.DMC_TREASURE_MAP_PENDING, PersistentDataType.BOOLEAN);
 		String treasureMarkerId = pdc.get(Constants.DMC_TREASURE_MARKER_ID_KEY, PersistentDataType.STRING);
+		String pirateName = pdc.get(Constants.DMC_PIRATE_NAME, PersistentDataType.STRING);
+		String pirateAdjective = pdc.get(Constants.DMC_PIRATE_ADJECTIVE, PersistentDataType.STRING);
 		byte[] packedBits = pdc.get(Constants.DMC_TREASURE_MAP_PIXELS, PersistentDataType.BYTE_ARRAY);
 
 		if( mapId == null ||
@@ -202,7 +216,7 @@ public class TreasureMapData {
 			return null;
 		}
 
-		TreasureMapData data = new TreasureMapData(mapId, worldId, x, y, z, level, markerCreated);
+		TreasureMapData data = new TreasureMapData(mapId, worldId, x, y, z, level, markerCreated, pirateName, pirateAdjective);
 		data.setPending(pending != null && pending);
 		if( packedBits != null )
 			data.setPackedBits(packedBits);

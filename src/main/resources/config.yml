@@ -2,6 +2,12 @@
 
 debug: true
 
+messages:
+  treasure-recovered:
+    enabled: true
+    broadcast: false
+    text: "%player% has recovered the treasure of %adjective% pirate %pirate_name% and broken the curse."
+
 barrels:
   max-active: 30
   min-lifetime-minutes: 4
