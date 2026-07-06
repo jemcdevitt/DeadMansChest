@@ -87,7 +87,11 @@ public class Constants {
     "stormbound",
     "ruthless",
     "barnacle-covered",
-    "moon-cursed"
+    "moon-cursed",
+		"white hair",
+		"four-teeth",
+		"black eyes",
+		"gloomy"
 	};
 	
 	private static final String[] FIRST_NAMES = {
@@ -102,7 +106,12 @@ public class Constants {
     "Jonas",
     "Cassia",
     "Morgan",
-    "Tobias"
+    "Tobias",
+		"Marie",
+		"Sadye",
+		"Brinley",
+		"Hastings",
+		"Bridget"
 	};
 	
 	private static final String[] SURNAMES = {
@@ -117,7 +126,11 @@ public class Constants {
     "Ironhook",
     "Gallows",
     "Seabane",
-    "Duskmoor"
+    "Duskmoor",
+		"Snape",
+		"Richmond",
+		"Morley",
+		"Whulsup"
 	};
 
 	public static String generatePirateName(Random rng) {
