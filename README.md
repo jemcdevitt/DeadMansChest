@@ -234,6 +234,12 @@ Example configuration shape:
 ```yaml
 debug: true
 
+messages:
+  treasure-recovered:
+    enabled: true
+    broadcast: false
+    text: "%player% has recovered the treasure of %adjective% pirate %pirate_name% and broken the curse."
+
 barrels:
   max-active: 30
   min-lifetime-minutes: 4
@@ -551,17 +557,12 @@ It is meant to add a small, memorable adventure to survival play.
 
 The best moments should feel like stories players tell afterward:
 
-> I saw something glowing out on the water.
-
-> The map was soaked, but it started to reveal itself.
-
-> We found the skull marker at night.
-
-> The skeletons came out of nowhere.
-
-> The chest rose out of the ground after the last guardian fell.
-
-> We got a Mending book and barely made it home.
+* I saw something glowing out on the water.
+* The map was soaked, but it started to reveal itself.
+* We found the skull marker at night.
+* The skeletons came out of nowhere.
+* The chest rose out of the ground after the last guardian fell.
+* We got a Mending book and barely made it home.
 
 That is the experience this plugin is trying to create.
 
