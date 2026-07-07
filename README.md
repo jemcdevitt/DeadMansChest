@@ -1,9 +1,9 @@
 
 <p align="center">
-  <img src="images/DeadMansChest.png" width="160" alt="Dead Man's Chest logo">
+  <img src="images/DeadMansChest.png" width="160" alt="Deadman's Chest logo">
 </p>
 
-<h1 align="center">Dead Man's Chest</h1>
+<h1 align="center">Deadman's Chest</h1>
 
 <p align="center">
   <strong>Drifting barrels, soggy pirate maps, cursed guardians, and buried treasure for PaperMC servers.</strong>
@@ -15,9 +15,9 @@
 
 ---
 
-## What Is Dead Man's Chest?
+## What Is Deadman's Chest?
 
-**Dead Man's Chest** turns the open ocean into the beginning of a survival-friendly pirate adventure.
+**Deadman's Chest** turns the open ocean into the beginning of a survival-friendly pirate adventure.
 
 While exploring the world, players may discover strange glowing barrels drifting in the water. Claim the soggy map inside, follow the skull-marked chart, locate the cursed treasure marker, defeat the guardians, and claim whatever the dead left behind.
 
@@ -29,7 +29,7 @@ A dead pirate does not give up his loot willingly.
 
 ## The Gameplay Loop
 
-Dead Man's Chest is built around a complete treasure-hunt loop:
+Deadman's Chest is built around a complete treasure-hunt loop:
 
 ```text
 Find a drifting barrel
@@ -66,17 +66,17 @@ The goal is not to create a complicated quest system. The goal is to add mystery
 * Configurable loot tables
 * Support for enchanted book rewards
 * Support for custom configured loot
-* Operator cleanup command for Dead Man's Chest entities
+* Operator cleanup command for Deadman's Chest entities
 * No resource pack required
 * No NMS or internal server classes
 
-Dead Man's Chest is designed to feel like something that belongs naturally in a survival world: rare, atmospheric, dangerous, and rewarding.
+Deadman's Chest is designed to feel like something that belongs naturally in a survival world: rare, atmospheric, dangerous, and rewarding.
 
 ---
 
 ## Treasure Tiers
 
-Dead Man's Chest uses three visual treasure tiers.
+Deadman's Chest uses three visual treasure tiers.
 
 Each tier carries through the entire hunt:
 
@@ -179,7 +179,7 @@ Minecraft survival already has wonderful systems:
 * rare resources
 * strange places in the world
 
-Dead Man's Chest tries to connect those systems into a small adventure.
+Deadman's Chest tries to connect those systems into a small adventure.
 
 It gives players a reason to sail, explore, prepare, fight, and return home with a story.
 
@@ -210,13 +210,13 @@ When the plugin is running, treasure barrels may begin appearing in valid water 
 * Paper 1.21.x
 * Java 21
 
-Dead Man's Chest uses supported Bukkit/Paper APIs and does not rely on NMS or internal server classes.
+Deadman's Chest uses supported Bukkit/Paper APIs and does not rely on NMS or internal server classes.
 
 ---
 
 ## Configuration
 
-Dead Man's Chest is intended to be configurable while still having sensible defaults.
+Deadman's Chest is intended to be configurable while still having sensible defaults.
 
 Configuration areas include:
 
@@ -333,7 +333,7 @@ loot:
         weight: 4
     custom:
       - material: minecraft:diamond_sword
-        name: "Dead Man's Blade"
+        name: "Deadman's Blade"
         min: 1
         max: 1
         weight: 1
@@ -378,7 +378,7 @@ This makes the reward feel like an actual treasure chest rather than a simple it
 
 ### Loot Categories
 
-Dead Man's Chest loot may include:
+Deadman's Chest loot may include:
 
 * Food
 * Ingots and gems
@@ -418,7 +418,7 @@ loot:
   level-3:
     custom:
       - material: DIAMOND_SWORD
-        name: "Dead Man's Blade"
+        name: "Deadman's Blade"
         min: 1
         max: 1
         weight: 1
@@ -458,13 +458,13 @@ The encounter is designed to be dangerous but not absurd. Players can prepare us
 * Iron golems
 * Terrain preparation
 
-Dead Man's Chest creates the problem. Minecraft gives players many ways to solve it.
+Deadman's Chest creates the problem. Minecraft gives players many ways to solve it.
 
 ---
 
 ## World Atmosphere
 
-Dead Man's Chest leans into a cursed pirate mood:
+Deadman's Chest leans into a cursed pirate mood:
 
 * glowing barrels drifting at sea
 * damp parchment maps
@@ -485,7 +485,7 @@ Commands are primarily intended for operators and server recovery.
 | Command                | Description                                       |
 | ---------------------- | ------------------------------------------------- |
 | `/deadmanschest:info`  | Shows current spawned barrel information.         |
-| `/deadmanschest:flush` | Removes Dead Man's Chest tagged world components. |
+| `/deadmanschest:flush` | Removes Deadman's Chest tagged world components. |
 
 Command behavior may change as the plugin matures.
 
@@ -495,7 +495,7 @@ During beta, commands may be more permissive or debug-oriented than they will be
 
 ## Operator Notes
 
-Dead Man's Chest uses Display Entities, Interaction entities, PersistentDataContainer tags, and custom map renderers.
+Deadman's Chest uses Display Entities, Interaction entities, PersistentDataContainer tags, and custom map renderers.
 
 Important behavior:
 
@@ -504,7 +504,7 @@ Important behavior:
 * Treasure maps are player-held custom maps.
 * Treasure markers may persist in the world until activated.
 * Treasure chests remain only while loot remains.
-* Operator cleanup tools exist for removing Dead Man's Chest world entities if needed.
+* Operator cleanup tools exist for removing Deadman's Chest world entities if needed.
 
 This design allows abandoned treasure markers to become atmospheric world dressing while still giving server operators a recovery path.
 
@@ -512,7 +512,7 @@ This design allows abandoned treasure markers to become atmospheric world dressi
 
 ## Performance Notes
 
-Dead Man's Chest is designed to keep active entity counts bounded.
+Deadman's Chest is designed to keep active entity counts bounded.
 
 * Floating barrels are capped and time out.
 * Treasure markers are lightweight Display/Interaction compositions.
@@ -528,7 +528,7 @@ As with any plugin using visual entities, server owners should avoid extreme con
 
 ## Current Status
 
-Dead Man's Chest is currently in beta.
+Deadman's Chest is currently in beta.
 
 The full gameplay loop is playable:
 
@@ -551,7 +551,7 @@ Feedback, bug reports, and suggestions are welcome.
 
 ## Design Philosophy
 
-Dead Man's Chest is not meant to be a full quest engine.
+Deadman's Chest is not meant to be a full quest engine.
 
 It is meant to add a small, memorable adventure to survival play.
 
@@ -570,7 +570,7 @@ That is the experience this plugin is trying to create.
 
 ## Compatibility
 
-Dead Man's Chest should work well with ordinary Paper survival servers.
+Deadman's Chest should work well with ordinary Paper survival servers.
 
 It is especially fun alongside plugins or server styles that encourage:
 
@@ -590,7 +590,7 @@ No resource pack is required.
 
 ## Inspiration
 
-Dead Man's Chest is inspired by:
+Deadman's Chest is inspired by:
 
 * pirate legends
 * cursed treasure
@@ -606,7 +606,7 @@ A pirate, even a dead one, is not going to give up his loot willingly.
 
 ## License
 
-Dead Man's Chest is licensed under the MIT License.
+Deadman's Chest is licensed under the MIT License.
 
 See the [LICENSE](LICENSE) file for full details.
 
@@ -614,7 +614,7 @@ See the [LICENSE](LICENSE) file for full details.
 
 ## Final Thoughts
 
-Dead Man's Chest is meant to add mystery to the ocean and danger to treasure hunting.
+Deadman's Chest is meant to add mystery to the ocean and danger to treasure hunting.
 
 Not every barrel should be ignored.
 
