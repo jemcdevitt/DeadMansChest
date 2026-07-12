@@ -208,7 +208,11 @@ When the plugin is running, treasure barrels may begin appearing in valid water 
 ### Tested Against
 
 * Paper 1.21.x
-* Java 21
+* Paper 26.1.2
+* Paper 26.2
+
+Built with Java 21
+
 
 Dead Man's Chest uses supported Bukkit/Paper APIs and does not rely on NMS or internal server classes.
 
