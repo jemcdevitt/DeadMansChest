@@ -169,6 +169,7 @@ public class BarrelManager implements Listener {
 							Location waterBlock = new Location(world, (double)blockX + 0.5, (double)(world.getSeaLevel()-1) + 0.70, (double)blockZ + 0.5);
 							if( isFarEnoughFromOthers(waterBlock)) {
 								FloatingBarrel barrel = new FloatingBarrel(waterBlock, config);
+								LOG(0,"Spawning barrel in '%s' at (%d,%d,%d)", world.getName(), waterBlock.getBlockX(), waterBlock.getBlockY(), waterBlock.getBlockZ());
 								barrels.put(barrel.getUniqueId(), barrel);
 								barrel.showInfo(null, false);
 								spawnedABarrel = true;

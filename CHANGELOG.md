@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.1
+
+* Added ability to white list allowed worlds
+
 ## 1.0.0
 
 * Official release, tested against 1.21.11, 26.1.2, and 26.2 

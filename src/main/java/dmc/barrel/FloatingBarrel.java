@@ -99,8 +99,8 @@ public class FloatingBarrel {
 	}
 
 	public void showInfo(Player player, boolean force) {
-		LOG(force?10:0,player, "Barrel at (%.2f,%.2f,%.2f), TTL: %d, Level: %d",
-				loc.getX(), loc.getY(), loc.getZ(), ttl, level);
+		LOG(force?10:0,player, "Barrel at (%.2f,%.2f,%.2f) in '%s', TTL: %d, Level: %d",
+				loc.getX(), loc.getY(), loc.getZ(), loc.getWorld().getName(), ttl, level);
 	}
 	
 }

@@ -19,6 +19,11 @@ treasure:
   min-distance: 300
   max-distance: 1200
 
+use-white-list: true
+
+white-list-worlds:
+  - overworld
+
 loot:
   remove-defaults: false
 

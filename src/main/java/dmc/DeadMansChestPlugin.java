@@ -79,6 +79,10 @@ public class DeadMansChestPlugin extends JavaPlugin {
 		treasureManager = new TreasureManager(this, lootManager);
 		getServer().getPluginManager().registerEvents(treasureManager, this);
 
+
+		for(World world : getServer().getWorlds())
+			LOG(0,"World: %s : %s", world.getName(), world.getUID().toString());
+
 		LOG(0,"Dead Man's Chest plugin startup");
 	}
 

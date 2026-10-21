@@ -7,6 +7,8 @@ package dmc;
  * See LICENSE file in the project root for full license information.
  */
 
+import java.util.ArrayList;
+import java.util.List;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -31,6 +33,9 @@ public class Configuration {
 	private TreasureConfig treasureConfig;
 	private MessagesConfig messagesConfig;
 
+	private boolean useWhiteList = false;
+	private List<String> whiteListWorlds = new ArrayList<>();
+
 	Configuration(DeadMansChestPlugin plugin) {
 		this.plugin = plugin;
 		loadConfiguration();
@@ -40,6 +45,10 @@ public class Configuration {
 		return this.debugOn;
 	}
 
+	public List<String> getWhiteListWorlds() {
+		return whiteListWorlds;
+	}
+	
 	public BarrelsConfig getBarrelsConfig() {
 		return this.barrelsConfig;
 	}
@@ -54,6 +63,14 @@ public class Configuration {
 	
 	public void showInfo() {
 		LOG(10,"Debug is " + (debugOn?"ON":"OFF"));
+		LOG(10, "use-white-list: " + (useWhiteList ? "true":"false"));
+		if( useWhiteList ) {
+			LOG(10,"Allowed worlds:");
+			for(String s : whiteListWorlds ) {
+				LOG(10, "   " + s);
+			}
+		}
+				
 		barrelsConfig.showInfo();
 		treasureConfig.showInfo();
 		messagesConfig.showInfo();
@@ -65,6 +82,13 @@ public class Configuration {
 			LOG(1,"Configuration should not be null");
 		} else {
 			debugOn = cfg.getBoolean("debug", false);
+			useWhiteList = cfg.getBoolean("use-white-list", false);
+			List<String> tmp = cfg.getStringList("white-list-worlds");
+			if( tmp != null && tmp.size() != 0 ) {
+				whiteListWorlds.addAll(tmp);
+			}
+
+			
 			barrelsConfig = BarrelsConfig.get(cfg);
 			treasureConfig = TreasureConfig.get(cfg);
 			messagesConfig = MessagesConfig.get(cfg);
@@ -77,6 +101,15 @@ public class Configuration {
 	//may add a config for other worlds in the
 	//future
 	public boolean isWorldAllowed(World world) {
+		if( useWhiteList ) {
+			String name = world.getName();
+			for(String allowed : whiteListWorlds ) {
+				if( allowed.equalsIgnoreCase(name)) {
+					return true;
+				}
+			}
+			return false;
+		}
 		return world.getEnvironment() == World.Environment.NORMAL;
 	}
 
