@@ -226,6 +226,7 @@ Configuration areas include:
 
 * Barrel spawn limits
 * Barrel lifetime
+* Whitelisting of worlds to allow barrels
 * Treasure generation distance
 * Treasure tier weighting
 * Loot tables
@@ -237,6 +238,9 @@ Example configuration shape:
 
 ```yaml
 debug: true
+use-white-list: false
+white-list-worlds: 
+	- overworld
 
 messages:
   treasure-recovered:
