@@ -240,7 +240,7 @@ Example configuration shape:
 debug: true
 use-white-list: false
 white-list-worlds: 
-	- overworld
+  - overworld
 
 messages:
   treasure-recovered:
